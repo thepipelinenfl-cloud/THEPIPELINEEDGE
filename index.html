@@ -1,145 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Pipeline — NFL Pickem Pool App 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0d1117;--bg2:#161b24;--bg3:#1e2633;--bg4:#252e3d;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e6edf3;--text2:#8b96a7;--text3:#4e5a6a;--green:#2ea043;--green2:#3fb950;--blue:#1f6feb;--blue2:#388bfd;--amber:#d29922;--amber2:#e3b341;--red:#da3633;--red2:#f85149;--teal:#0891b2;--teal2:#22d3ee;--gold:#f0a82e}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
-.header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:var(--bg2);border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:100}
-.header-left{display:flex;align-items:center;gap:14px}
-.hlogo{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#1f6feb,#0891b2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.htitle-main{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.06em}
-.htitle-main span{color:var(--gold)}
-.htitle-sub{font-size:11px;color:var(--text2);margin-top:1px}
-.hlive{display:inline-flex;align-items:center;gap:5px;background:rgba(46,160,67,0.15);border:1px solid rgba(46,160,67,0.35);color:var(--green2);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
-.hlive::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green2);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.nav-group{background:var(--bg2);border-bottom:1px solid var(--border)}
-.nav-label{padding:6px 28px 0;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.12em}
-.nav{display:flex;padding:0 28px;gap:2px;overflow-x:auto}
-.nav-sep{height:1px;background:var(--border);margin:0 28px}
-.ntab{padding:10px 18px;color:var(--text2);cursor:pointer;font-size:12px;font-weight:500;border-bottom:2px solid transparent;white-space:nowrap;transition:.15s;display:flex;align-items:center;gap:6px}
-.ntab:hover{color:var(--text)}
-.ntab.active{color:var(--text);border-bottom-color:var(--gold)}
-.pane{display:none;padding:28px;max-width:1280px;margin:0 auto}
-.pane.active{display:block}
-.mode-banner{display:flex;align-items:center;gap:10px;padding:8px 28px;font-size:11px;font-weight:600;letter-spacing:.05em}
-.mode-banner.auto{background:rgba(46,160,67,0.08);border-bottom:1px solid rgba(46,160,67,0.2);color:var(--green2)}
-.mode-banner.manual{background:rgba(240,168,46,0.08);border-bottom:1px solid rgba(240,168,46,0.2);color:var(--amber2)}
-.stitle{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.05em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
-.stitle::after{content:'';flex:1;height:1px;background:var(--border)}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
-.card-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
-.card-val{font-size:28px;font-family:'Bebas Neue',sans-serif;letter-spacing:.02em}
-.card-sub{font-size:10px;color:var(--text3);margin-top:3px}
-.c-green{color:var(--green2)}.c-amber{color:var(--amber2)}.c-blue{color:var(--blue2)}.c-red{color:var(--red2)}.c-gold{color:var(--gold)}
-.tbl-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
-table{width:100%;border-collapse:collapse}
-thead tr{background:var(--bg3)}
-th{padding:9px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
-td{padding:9px 12px;border-top:1px solid var(--border);font-size:12px}
-.note-amber{background:rgba(210,153,34,0.07);border-left:3px solid var(--amber2);padding:9px 14px;border-radius:0 6px 6px 0;font-size:11px;color:var(--text2);margin:10px 0;line-height:1.7}
-.btn{padding:9px 18px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none}
-.btn-gold{background:rgba(240,168,46,0.15);color:var(--gold);border:1px solid rgba(240,168,46,0.3)}
-</style>
-</head>
-<body>
+<div class="pane" id="pane10">
+  <div class="mode-banner manual">MANUAL REFERENCE MODE Affiliate shopping links for customer traffic</div>
+  <div class="stitle">Affiliates</div>
 
-<div class="header">
-  <div class="header-left">
-    <div class="hlogo">🏈</div>
-    <div>
-      <div class="htitle-main">The Pipeline <span>2026</span> Application</div>
-      <div class="htitle-sub">Scott Plumley · Walk-Forward Validated · 60.0% over 1,359 real games (2021–2025)</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-lbl">Amazon Store ID</div>
+      <div class="card-val c-gold">thepipelinenf-20</div>
+      <div class="card-sub">Live tracking tag loaded</div>
     </div>
-    <div class="hlive">LIVE</div>
+    <div class="card">
+      <div class="card-lbl">Fanatics Status</div>
+      <div class="card-val c-amber">Pending</div>
+      <div class="card-sub">Replace placeholder URL once approved</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Tab Purpose</div>
+      <div class="card-val c-blue">Shop Links</div>
+      <div class="card-sub">Customer shopping destinations</div>
+    </div>
   </div>
-  <div class="header-right">
-    <div class="hdate" id="hdate">—</div>
-    <div class="hsub">Season opens: <span>September 2026</span></div>
-  </div>
-</div>
 
-<div class="nav-group">
-  <div class="nav-label">🤖 Automated</div>
-  <div class="nav">
-    <div class="ntab auto-tab active" onclick="show(0)">Weekly Picks</div>
-    <div class="ntab auto-tab" onclick="show(1)">⛅ Weather</div>
-    <div class="ntab auto-tab" onclick="show(2)">Pool Tracker</div>
-    <div class="ntab auto-tab" onclick="show(3)">Season Summary</div>
-  </div>
-  <div class="nav-sep"></div>
-  <div class="nav-label">🛠️ Manual</div>
-  <div class="nav">
-    <div class="ntab" onclick="show(4)">Game Entry</div>
-    <div class="ntab" onclick="show(5)">Weekly Pool</div>
-    <div class="ntab" onclick="show(6)">Referee Lookup</div>
-    <div class="ntab" onclick="show(8)">Affiliates</div>
-    <div class="ntab" onclick="show(9)">About</div>
-    <div class="ntab" onclick="show(10)">Privacy</div>
-    <div class="ntab" onclick="show(11)">Terms</div>
-  </div>
-</div>
+  <div class="g2">
+    <div class="box">
+      <div class="box-title">Amazon</div>
+      <div class="note-green">Amazon link is active with your Store ID.</div>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <a class="btn btn-green" href="https://www.amazon.com/?tag=thepipelinenf-20" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:inline-flex;align-items:center;">Open Amazon Storefront</a>
+        <span style="font-size:11px;color:var(--text2);">Tracking tag: thepipelinenf-20</span>
+      </div>
+    </div>
 
-<!-- WEATHER TAB - exactly from MASTER, no changes -->
-<div class="pane" id="pane1">
-  <div class="mode-banner manual">⛅ WEATHER — Live conditions for every outdoor stadium</div>
-  <div class="stitle">Stadium Weather — Game Day Conditions</div>
-  <div class="note-amber" style="margin-bottom:16px">Dome stadiums are weather-neutral. Outdoor stadiums: wind >15mph or temp <32°F triggers −1 confidence adjustment. Check every Wednesday.</div>
-  <div class="cards" style="margin-bottom:16px">
-    <div class="card"><div class="card-lbl">Dome Stadiums</div><div class="card-val c-blue">11</div><div class="card-sub">ARI ATL DAL DET HOU IND LAC LAR LVR MIN NO</div></div>
-    <div class="card"><div class="card-lbl">Outdoor Stadiums</div><div class="card-val c-amber">21</div><div class="card-sub">Weather affects confidence score</div></div>
-    <div class="card"><div class="card-lbl">Wind Threshold</div><div class="card-val c-red">&gt;15 mph</div><div class="card-sub">−1 conf on passing teams</div></div>
-    <div class="card"><div class="card-lbl">Cold Threshold</div><div class="card-val c-red">&lt;32°F</div><div class="card-sub">−1 conf on road team</div></div>
+    <div class="box">
+      <div class="box-title">Fanatics</div>
+      <div class="note-amber">Placeholder only. Replace after approval.</div>
+      <label style="margin-top:10px;">Fanatics Placeholder URL For Edit Team</label>
+      <input type="text" value="https://www.fanatics.com/PLACEHOLDER-UPDATE-LINK" readonly>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <a class="btn btn-gold" href="https://www.fanatics.com/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:inline-flex;align-items:center;">Open Fanatics Main Site</a>
+        <span style="font-size:11px;color:var(--text2);">Replace with approved affiliate URL later.</span>
+      </div>
+    </div>
   </div>
-  <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px">
-    <button class="btn btn-gold" onclick="loadAllWeather()" style="padding:10px 20px">⛅ Load Weather</button>
-    <span id="weather-status" style="font-size:11px;color:var(--text2)"></span>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px" id="weather-grid">
-    <div style="text-align:center;padding:40px;color:var(--text3);grid-column:1/-1">Click Load Weather to fetch live conditions for all outdoor stadiums</div>
+
+  <div class="box">
+    <div class="box-title">Edit Team Note</div>
+    <div class="note">This tab is app-only. It does not connect to the team-only master. When Fanatics approval is complete, replace the placeholder URL in both the readonly field and button href.</div>
   </div>
 </div>
-
-<!-- AFFILIATES TAB -->
-<div class="pane" id="pane8">
-  <div class="stitle">🎯 Affiliate Links</div>
-  <div class="note-amber" style="margin-bottom:20px">The Pipeline is free. These are affiliate partnerships — we may earn a small commission at no extra cost to you. For entertainment purposes only. Must be 21+.</div>
-  <a href="https://www.fanatics.com/" target="_blank" style="display:block;margin:12px 0;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);text-decoration:none">🛒 Shop Fanatics — Official NFL Gear</a>
-  <a href="https://www.amazon.com/s?k=NFL+gear&tag=thepipelinenf-20" target="_blank" style="display:block;margin:12px 0;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);text-decoration:none">📦 Shop Amazon NFL Gear (your tag: thepipelinenf-20)</a>
-</div>
-
-<!-- Full Referee Lookup from MASTER -->
-<div class="pane" id="pane6">
-  <div class="stitle">Referee Crew Adjustments — 2026</div>
-  <div class="note">Assignments released Tuesday/Wednesday. Green = home-friendly. Red = road-friendly. Flip sign when picking road team.</div>
-  <div class="tbl-wrap"><table>
-    <thead><tr><th>Referee</th><th>Flags/Gm</th><th>Home ATS%</th><th>Adj</th><th>Profile</th></tr></thead>
-    <tbody id="refBody"></tbody>
-  </table></div>
-</div>
-
-<!-- Your original panes stay exactly the same (Weekly Picks, Pool Tracker, Game Entry, Luck Flags, Backtest, etc.) -->
-
-<script>
-// Tab switcher
-function show(n){
-  document.querySelectorAll('.pane').forEach((p,i)=>p.classList.toggle('active',i===n));
-  document.querySelectorAll('.ntab').forEach((t,i)=>t.classList.toggle('active',i===n));
-}
-
-// Init
-(function(){
-  const n = new Date();
-  document.getElementById('hdate').textContent = n.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'}) + ' — ' + n.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
-  show(0);
-})();
-</script>
-
-</body>
-</html>
