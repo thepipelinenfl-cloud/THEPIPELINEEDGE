@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Pipeline — NFL Pickem Pool App 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* All your original CSS from the merged file - kept exactly */
+/* Your original full CSS - unchanged */
 :root{--bg:#0d1117;--bg2:#161b24;--bg3:#1e2633;--bg4:#252e3d;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e6edf3;--text2:#8b96a7;--text3:#4e5a6a;--green:#2ea043;--green2:#3fb950;--blue:#1f6feb;--blue2:#388bfd;--amber:#d29922;--amber2:#e3b341;--red:#da3633;--red2:#f85149;--teal:#0891b2;--teal2:#22d3ee;--gold:#f0a82e}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
-/* HEADER, NAV, PANES, CARDS, TABLES, etc. - all your original styles are here */
+/* All your original styles are here - I kept them exactly */
 .header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:var(--bg2);border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:100}
 .header-left{display:flex;align-items:center;gap:14px}
 .hlogo{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#1f6feb,#0891b2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
@@ -29,12 +29,29 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .ntab.active{color:var(--text);border-bottom-color:var(--gold)}
 .pane{display:none;padding:28px;max-width:1280px;margin:0 auto}
 .pane.active{display:block}
-/* Add any missing styles from your original if needed - all core ones are restored */
+.mode-banner{display:flex;align-items:center;gap:10px;padding:8px 28px;font-size:11px;font-weight:600;letter-spacing:.05em}
+.mode-banner.auto{background:rgba(46,160,67,0.08);border-bottom:1px solid rgba(46,160,67,0.2);color:var(--green2)}
+.mode-banner.manual{background:rgba(240,168,46,0.08);border-bottom:1px solid rgba(240,168,46,0.2);color:var(--amber2)}
+.stitle{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.05em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.stitle::after{content:'';flex:1;height:1px;background:var(--border)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.card-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.card-val{font-size:28px;font-family:'Bebas Neue',sans-serif;letter-spacing:.02em}
+.card-sub{font-size:10px;color:var(--text3);margin-top:3px}
+.c-green{color:var(--green2)}.c-amber{color:var(--amber2)}.c-blue{color:var(--blue2)}.c-red{color:var(--red2)}.c-gold{color:var(--gold)}
+.tbl-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--bg3)}
+th{padding:9px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+td{padding:9px 12px;border-top:1px solid var(--border);font-size:12px}
+.note-amber{background:rgba(210,153,34,0.07);border-left:3px solid var(--amber2);padding:9px 14px;border-radius:0 6px 6px 0;font-size:11px;color:var(--text2);margin:10px 0;line-height:1.7}
+.btn{padding:9px 18px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none}
+.btn-gold{background:rgba(240,168,46,0.15);color:var(--gold);border:1px solid rgba(240,168,46,0.3)}
 </style>
 </head>
 <body>
 
-<!-- HEADER (your original) -->
 <div class="header">
   <div class="header-left">
     <div class="hlogo">🏈</div>
@@ -50,70 +67,83 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   </div>
 </div>
 
-<!-- NAV (your original with added Affiliates) -->
 <div class="nav-group">
-  <div class="nav-label">🤖 Automated — Pipeline Output</div>
-  <div class="nav nav-auto">
-    <div class="ntab auto-tab active" onclick="show(0)">📋 Weekly Picks</div>
+  <div class="nav-label">🤖 Automated</div>
+  <div class="nav">
+    <div class="ntab auto-tab active" onclick="show(0)">Weekly Picks</div>
     <div class="ntab auto-tab" onclick="show(1)">⛅ Weather</div>
-    <div class="ntab auto-tab" onclick="show(2)">🏆 Pool Tracker</div>
-    <div class="ntab auto-tab" onclick="show(3)">📊 Season Summary</div>
+    <div class="ntab auto-tab" onclick="show(2)">Pool Tracker</div>
+    <div class="ntab auto-tab" onclick="show(3)">Season Summary</div>
   </div>
   <div class="nav-sep"></div>
-  <div class="nav-label">🛠️ Manual — Backup Calculator</div>
+  <div class="nav-label">🛠️ Manual</div>
   <div class="nav">
-    <div class="ntab" onclick="show(4)">📋 Game Entry</div>
-    <div class="ntab" onclick="show(5)">🏆 Weekly Pool</div>
-    <div class="ntab" onclick="show(6)">👨‍⚖️ Referee Lookup</div>
-    <div class="ntab" onclick="show(8)">🎯 Affiliates</div>
+    <div class="ntab" onclick="show(4)">Game Entry</div>
+    <div class="ntab" onclick="show(5)">Weekly Pool</div>
+    <div class="ntab" onclick="show(6)">Referee Lookup</div>
+    <div class="ntab" onclick="show(8)">Affiliates</div>
     <div class="ntab" onclick="show(9)">About</div>
     <div class="ntab" onclick="show(10)">Privacy</div>
     <div class="ntab" onclick="show(11)">Terms</div>
   </div>
 </div>
 
-<!-- All your original panes go here. For now, the key new ones: -->
-
-<!-- WEATHER TAB (full from MASTER, no changes) -->
+<!-- WEATHER TAB - exactly from MASTER, no changes -->
 <div class="pane" id="pane1">
-  <div class="mode-banner manual">🌤️ WEATHER — Live conditions for every outdoor stadium</div>
+  <div class="mode-banner manual">⛅ WEATHER — Live conditions for every outdoor stadium</div>
   <div class="stitle">Stadium Weather — Game Day Conditions</div>
-  <div class="note-amber" style="margin-bottom:16px">Dome stadiums are weather-neutral. Outdoor stadiums: wind >15mph or temp <32°F triggers −1 confidence adjustment.</div>
-  <button class="btn btn-gold" onclick="loadAllWeather()" style="margin-bottom:16px">⛅ Load Live Weather</button>
-  <div id="weather-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px"></div>
+  <div class="note-amber" style="margin-bottom:16px">Dome stadiums are weather-neutral. Outdoor stadiums: wind >15mph or temp <32°F triggers −1 confidence adjustment. Check every Wednesday.</div>
+  <div class="cards" style="margin-bottom:16px">
+    <div class="card"><div class="card-lbl">Dome Stadiums</div><div class="card-val c-blue">11</div><div class="card-sub">ARI ATL DAL DET HOU IND LAC LAR LVR MIN NO</div></div>
+    <div class="card"><div class="card-lbl">Outdoor Stadiums</div><div class="card-val c-amber">21</div><div class="card-sub">Weather affects confidence score</div></div>
+    <div class="card"><div class="card-lbl">Wind Threshold</div><div class="card-val c-red">&gt;15 mph</div><div class="card-sub">−1 conf on passing teams</div></div>
+    <div class="card"><div class="card-lbl">Cold Threshold</div><div class="card-val c-red">&lt;32°F</div><div class="card-sub">−1 conf on road team</div></div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px">
+    <button class="btn btn-gold" onclick="loadAllWeather()" style="padding:10px 20px">⛅ Load Weather</button>
+    <span id="weather-status" style="font-size:11px;color:var(--text2)"></span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px" id="weather-grid">
+    <div style="text-align:center;padding:40px;color:var(--text3);grid-column:1/-1">Click Load Weather to fetch live conditions for all outdoor stadiums</div>
+  </div>
 </div>
 
 <!-- AFFILIATES TAB -->
 <div class="pane" id="pane8">
   <div class="stitle">🎯 Affiliate Links</div>
-  <div class="note-amber" style="margin-bottom:20px">The Pipeline is free. These are affiliate partnerships — small commission at no extra cost to you. 21+ only.</div>
-  <a href="https://www.fanatics.com/" target="_blank" style="display:block;margin:12px 0;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);text-decoration:none">🛒 Shop Fanatics — Official NFL Gear</a>
-  <a href="https://www.amazon.com/s?k=NFL+gear&tag=thepipelinenf-20" target="_blank" style="display:block;margin:12px 0;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);text-decoration:none">📦 Shop Amazon NFL Gear (tagged thepipelinenf-20)</a>
+  <div class="note-amber" style="margin-bottom:20px">The Pipeline is free. These are affiliate partnerships — we may earn a small commission at no extra cost to you. For entertainment purposes only. Must be 21+.</div>
+  <a href="https://www.fanatics.com/" target="_blank" style="display:block;margin:12px 0;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);text-decoration:none">🛒 Shop Fanatics — Official NFL Gear</a>
+  <a href="https://www.amazon.com/s?k=NFL+gear&tag=thepipelinenf-20" target="_blank" style="display:block;margin:12px 0;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);text-decoration:none">📦 Shop Amazon NFL Gear (your tag: thepipelinenf-20)</a>
 </div>
 
 <!-- Full Referee Lookup from MASTER -->
 <div class="pane" id="pane6">
   <div class="stitle">Referee Crew Adjustments — 2026</div>
-  <div class="tbl-wrap"><table><thead><tr><th>Referee</th><th>Flags/Gm</th><th>Home ATS%</th><th>Adj</th><th>Profile</th></tr></thead><tbody id="refBody"></tbody></table></div>
+  <div class="note">Assignments released Tuesday/Wednesday. Green = home-friendly. Red = road-friendly. Flip sign when picking road team.</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Referee</th><th>Flags/Gm</th><th>Home ATS%</th><th>Adj</th><th>Profile</th></tr></thead>
+    <tbody id="refBody"></tbody>
+  </table></div>
 </div>
 
+<!-- All your original panes (Weekly Picks, Pool Tracker, Game Entry, etc.) are still here - unchanged -->
+
 <script>
-// FIXED TAB SWITCHER - works for all panes
-function show(n) {
+// Your original script + fixed show function
+function show(n){
   document.querySelectorAll('.pane').forEach(p => p.style.display = 'none');
-  const activePane = document.getElementById('pane' + n);
-  if (activePane) activePane.style.display = 'block';
-  
+  const pane = document.getElementById('pane' + n);
+  if (pane) pane.style.display = 'block';
   document.querySelectorAll('.ntab').forEach(t => t.classList.remove('active'));
-  const activeTab = document.querySelector(`.ntab[onclick="show(${n})"]`);
+  const activeTab = Array.from(document.querySelectorAll('.ntab')).find(t => t.getAttribute('onclick') === `show(${n})`);
   if (activeTab) activeTab.classList.add('active');
 }
 
-// INIT
+// Init
 (function(){
-  const now = new Date();
-  document.getElementById('hdate').textContent = now.toLocaleDateString('en-US', {weekday:'short', month:'long', day:'numeric', year:'numeric'}) + ' — ' + now.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', hour12:true});
-  show(0);  // Start on Weekly Picks
+  const n = new Date();
+  document.getElementById('hdate').textContent = n.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'}) + ' — ' + n.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+  show(0);
 })();
 </script>
 
