@@ -1,736 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Pipeline — NFL Edge 2026 Application</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0d1117;--bg2:#161b24;--bg3:#1e2633;--bg4:#252e3d;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e6edf3;--text2:#8b96a7;--text3:#4e5a6a;--green:#2ea043;--green2:#3fb950;--blue:#1f6feb;--blue2:#388bfd;--amber:#d29922;--amber2:#e3b341;--red:#da3633;--red2:#f85149;--teal:#0891b2;--teal2:#22d3ee;--gold:#f0a82e}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
-.header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:var(--bg2);border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:100}
-.header-left{display:flex;align-items:center;gap:14px}
-.hlogo{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#1f6feb,#0891b2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.htitle-main{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.06em}
-.htitle-main span{color:var(--gold)}
-.htitle-sub{font-size:11px;color:var(--text2);margin-top:1px}
-.hlive{display:inline-flex;align-items:center;gap:5px;background:rgba(46,160,67,0.15);border:1px solid rgba(46,160,67,0.35);color:var(--green2);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
-.hlive::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green2);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.header-right{text-align:right}
-.hdate{font-size:13px;font-weight:500}
-.hsub{font-size:11px;color:var(--text2);margin-top:2px}
-.hsub span{color:var(--green2);font-weight:600}
-.nav-group{background:var(--bg2);border-bottom:1px solid var(--border)}
-.nav-label{padding:6px 28px 0;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.12em}
-.nav{display:flex;padding:0 28px;gap:2px;overflow-x:auto}
-.nav-sep{height:1px;background:var(--border);margin:0 28px}
-.ntab{padding:10px 18px;color:var(--text2);cursor:pointer;font-size:12px;font-weight:500;border-bottom:2px solid transparent;white-space:nowrap;transition:.15s;display:flex;align-items:center;gap:6px}
-.ntab:hover{color:var(--text)}
-.ntab.active{color:var(--text);border-bottom-color:var(--gold)}
-.ntab.auto-tab.active{border-bottom-color:var(--green2)}
-.nav-auto .ntab.active{border-bottom-color:var(--green2)}
-.pane{display:none;padding:28px;max-width:1280px;margin:0 auto}
-.pane.active{display:block}
-.stitle{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.05em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
-.stitle::after{content:'';flex:1;height:1px;background:var(--border)}
-.week-header{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:20px}
-.week-badge{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);letter-spacing:.04em}
-.week-meta{font-size:11px;color:var(--text2);margin-top:2px}
-.week-status{display:flex;align-items:center;gap:8px}
-.status-pill{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600}
-.status-ready{background:rgba(46,160,67,0.15);color:var(--green2);border:1px solid rgba(46,160,67,0.3)}
-.status-waiting{background:rgba(255,255,255,0.06);color:var(--text2);border:1px solid var(--border)}
-.picks-table{width:100%;border-collapse:collapse;margin-bottom:20px}
-.picks-table thead tr{background:var(--bg3)}
-.picks-table th{padding:10px 14px;text-align:left;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.09em;white-space:nowrap}
-.picks-table td{padding:11px 14px;border-top:1px solid var(--border);font-size:13px}
-.picks-table tbody tr:hover td{background:rgba(255,255,255,0.02)}
-.picks-table .tr-top td{background:rgba(240,168,46,0.05)}
-.pool-pts{font-family:'Bebas Neue',sans-serif;font-size:26px;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center}
-.pts-gold{background:rgba(240,168,46,0.2);color:var(--gold);border:1px solid rgba(240,168,46,0.4)}
-.pts-blue{background:rgba(56,139,253,0.15);color:var(--blue2);border:1px solid rgba(56,139,253,0.25)}
-.pts-gray{background:rgba(255,255,255,0.05);color:var(--text2);border:1px solid var(--border)}
-.matchup-cell .teams{font-size:14px;font-weight:600}
-.matchup-cell .teams .winner{color:var(--blue2)}
-.matchup-cell .meta{font-size:10px;color:var(--text3);margin-top:2px;font-family:'DM Mono',monospace}
-.conf-cell{text-align:center}
-.conf-num{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1}
-.conf-bar{width:60px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin:4px auto 0}
-.conf-fill{height:100%;border-radius:2px}
-.edge-cell{text-align:center;font-family:'DM Mono',monospace;font-size:13px;font-weight:500}
-.ml-badge{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.04em}
-.ml-yes{background:rgba(46,160,67,0.2);color:var(--green2);border:1px solid rgba(46,160,67,0.3)}
-.ml-no{background:rgba(255,255,255,0.05);color:var(--text3);border:1px solid var(--border);font-size:9px}
-.flag-cell{font-size:11px;color:var(--text2);max-width:200px}
-.flag-item{display:flex;align-items:center;gap:4px;padding:2px 0}
-.empty-state{text-align:center;padding:60px 20px;border:2px dashed rgba(255,255,255,0.08);border-radius:12px}
-.empty-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text2);letter-spacing:.05em;margin-bottom:8px}
-.empty-desc{font-size:13px;color:var(--text3);line-height:1.7;max-width:480px;margin:0 auto}
-.empty-cmd{display:inline-block;margin-top:16px;background:rgba(240,168,46,0.1);border:1px solid rgba(240,168,46,0.3);color:var(--gold);padding:10px 20px;border-radius:8px;font-family:'DM Mono',monospace;font-size:13px;font-weight:500}
-.box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
-.box-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:14px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;transition:.15s}
-.card:hover{border-color:var(--border2)}
-.card-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
-.card-val{font-size:28px;font-family:'Bebas Neue',sans-serif;letter-spacing:.02em}
-.card-sub{font-size:10px;color:var(--text3);margin-top:3px}
-.c-green{color:var(--green2)}.c-amber{color:var(--amber2)}.c-blue{color:var(--blue2)}.c-red{color:var(--red2)}.c-gold{color:var(--gold)}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:800px){.g2{grid-template-columns:1fr}}
-.tbl-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
-table{width:100%;border-collapse:collapse}
-thead tr{background:var(--bg3)}
-th{padding:9px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
-td{padding:9px 12px;border-top:1px solid var(--border);font-size:12px}
-tbody tr:hover td{background:rgba(255,255,255,.02)}
-.mono{font-family:'DM Mono',monospace;font-size:11px}
-.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600}
-.b-green{background:rgba(46,160,67,0.15);color:var(--green2);border:1px solid rgba(46,160,67,0.25)}
-.b-red{background:rgba(218,54,51,0.15);color:var(--red2);border:1px solid rgba(218,54,51,0.25)}
-.b-amber{background:rgba(210,153,34,0.15);color:var(--amber2);border:1px solid rgba(210,153,34,0.25)}
-.b-blue{background:rgba(31,111,235,0.15);color:var(--blue2);border:1px solid rgba(31,111,235,0.25)}
-.b-gray{background:rgba(255,255,255,0.06);color:var(--text2);border:1px solid var(--border)}
-.b-gold{background:rgba(240,168,46,0.15);color:var(--gold);border:1px solid rgba(240,168,46,0.3)}
-.note{background:rgba(31,111,235,0.07);border-left:3px solid var(--blue2);padding:9px 14px;border-radius:0 6px 6px 0;font-size:11px;color:var(--text2);margin:10px 0;line-height:1.7}
-.note-amber{background:rgba(210,153,34,0.07);border-left:3px solid var(--amber2);padding:9px 14px;border-radius:0 6px 6px 0;font-size:11px;color:var(--text2);margin:10px 0;line-height:1.7}
-.note-red{background:rgba(218,54,51,0.07);border-left:3px solid var(--red2);padding:9px 14px;border-radius:0 6px 6px 0;font-size:11px;color:var(--text2);margin:10px 0;line-height:1.7}
-.note-green{background:rgba(46,160,67,0.07);border-left:3px solid var(--green2);padding:9px 14px;border-radius:0 6px 6px 0;font-size:11px;color:var(--text2);margin:10px 0;line-height:1.7}
-.formula{background:var(--bg3);border-left:3px solid var(--gold);padding:9px 14px;border-radius:0 6px 6px 0;font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);margin:6px 0;line-height:1.7}
-label{display:block;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
-input,select{width:100%;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;font-size:12px;font-family:'DM Sans',sans-serif;margin-bottom:12px;-webkit-appearance:none}
-input:focus,select:focus{outline:none;border-color:var(--blue2)}
-.form-group{margin-bottom:0}
-.form-group label{display:block;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
-.form-group input,.form-group select{width:100%;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;font-size:12px;font-family:'DM Sans',sans-serif;-webkit-appearance:none;margin-bottom:0}
-.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--blue2)}
-.result-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:600px){.result-form{grid-template-columns:1fr}}
-.btn{padding:9px 18px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:.15s;font-family:'DM Sans',sans-serif}
-.btn-green{background:var(--green);color:#fff}.btn-green:hover{background:var(--green2)}
-.btn-blue{background:var(--blue);color:#fff}.btn-blue:hover{background:var(--blue2)}
-.btn-gold{background:rgba(240,168,46,0.15);color:var(--gold);border:1px solid rgba(240,168,46,0.3)}.btn-gold:hover{background:rgba(240,168,46,0.25)}
-.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text)}.btn-outline:hover{background:var(--bg3)}
-.conf-track{background:rgba(255,255,255,.06);border-radius:4px;height:6px;flex:1}
-.conf-fill-bar{height:6px;border-radius:4px}
-.wk-bar-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)}
-.wk-bar-row:last-child{border-bottom:none}
-.wk-lbl{width:52px;font-size:11px;color:var(--text2);flex-shrink:0}
-.wk-track{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
-.wk-fill{height:100%;border-radius:4px}
-.wk-val{width:48px;text-align:right;font-family:'DM Mono',monospace;font-size:11px;flex-shrink:0}
-.locked-bar{background:linear-gradient(90deg,rgba(31,111,235,0.1),rgba(8,145,178,0.06));border:1px solid rgba(31,111,235,0.2);border-radius:8px;padding:14px 20px;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.05em;color:var(--text2);margin-top:24px}
-.locked-bar span{color:var(--gold)}
-.tier3-bar{background:rgba(218,54,51,0.1);border:1px solid rgba(218,54,51,0.3);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--red2);font-weight:600;margin-bottom:14px;display:none}
-.score-big{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:.02em;line-height:1;text-align:center}
-.ref-adj-pos{color:var(--green2);font-family:'DM Mono',monospace;font-size:12px;font-weight:600;min-width:28px}
-.ref-adj-neg{color:var(--red2);font-family:'DM Mono',monospace;font-size:12px;font-weight:600;min-width:28px}
-.ref-adj-neu{color:var(--text3);font-family:'DM Mono',monospace;font-size:12px;font-weight:600;min-width:28px}
-.mode-banner{display:flex;align-items:center;gap:10px;padding:8px 28px;font-size:11px;font-weight:600;letter-spacing:.05em}
-.mode-banner.auto{background:rgba(46,160,67,0.08);border-bottom:1px solid rgba(46,160,67,0.2);color:var(--green2)}
-.mode-banner.manual{background:rgba(240,168,46,0.08);border-bottom:1px solid rgba(240,168,46,0.2);color:var(--amber2)}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pipeline - NFL Edge 2026 Application</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:rgba(255,255,255,0.07);--text:#e6edf3;--text2:#8b949e;--gold:#d3af37;--green2:#3fb950;--green:#00ff64;--red:#f85149}
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+        .header{display:flex;align-items:center;center;justify-content:space-between;padding:14px 28px;background:var(--bg2);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:100}
+        .header-left{display:flex;align-items:center;center;gap:14px}
+        .logo{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#f6d55c,#ed553b);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+        .title-main{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.06em}
+        .title-main span{color:var(--gold)}
+        .title-sub{font-size:11px;color:var(--text2);margin-top:1px}
+        .header-right{display:flex;align-items:center;gap:14px}
+        .hdate{font-size:11px;color:var(--text2);text-align:right}
+        .hlive{display:flex;align-items:center;gap:5px;padding:4px 8px;background:rgba(63,185,80,.1);border:1px solid var(--green2);border-radius:4px;font-size:10px;font-weight:700;color:var(--green2)}
+        .hlive::before{content:'';width:5px;height:5px;background:var(--green2);border-radius:50%;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+        .error-banner{display:none;background:var(--red);color:white;padding:12px 16px;text-align:center;font-weight:700;border-bottom:2px solid #d1240f;position:sticky;top:54px;z-index:99;animation:slideDown .3s ease-out}
+        .error-banner.show{display:block}
+        @keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+        .container{max-width:1200px;margin:0 auto;padding:20px}
+        .panel{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:20px}
+        .panel-title{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.08em;color:var(--gold);margin-bottom:16px;text-transform:uppercase}
+        .button-group{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:16px}
+        .btn{padding:10px 14px;background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;transition:all .2s;white-space:nowrap}
+        .btn:hover{background:var(--bg);border-color:var(--gold);color:var(--gold)}
+        .btn:active{transform:translateY(1px)}
+        .disclaimer{background:rgba(248,81,73,.1);border-left:3px solid var(--red);padding:12px;border-radius:4px;margin-top:16px}
+        .disclaimer-title{color:var(--red);font-weight:700;margin-bottom:6px}
+        .disclaimer-text{font-size:12px;line-height:1.5}
+        .responsible-play{background:rgba(63,185,80,.1);border-left:3px solid var(--green2);padding:10px;border-radius:4px;margin-top:8px;font-size:11px}
+        .privacy{background:rgba(79,161,246,.1);border-left:3px solid #4fa1f6;padding:12px;border-radius:4px;margin-top:16px}
+        .privacy-title{color:#4fa1f6;font-weight:700;margin-bottom:6px}
+        .privacy-text{font-size:12px;line-height:1.5}
+        .privacy a{color:#58a6ff;text-decoration:none}
+        .privacy a:hover{text-decoration:underline}
+        .promo{background:linear-gradient(135deg,rgba(213,48,49,.1),rgba(248,81,73,.05));border-left:3px solid var(--red);padding:16px;border-radius:6px;margin-top:16px}
+        .promo-title{color:var(--gold);font-weight:700;font-size:14px;margin-bottom:8px}
+        .promo-text{font-size:12px;line-height:1.5;margin-bottom:10px}
+        .promo-btn{background:linear-gradient(135deg,#d63031,#c92a2a);color:white;padding:10px 14px;border:none;border-radius:6px;cursor:pointer;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;transition:all .2s}
+        .promo-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(214,48,49,.3)}
+        .auto-notice{background:rgba(63,185,80,.05);border:1px solid var(--green2);border-radius:6px;padding:14px;margin-top:16px}
+        .auto-notice-title{color:var(--green2);font-weight:700;margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+        .waiting-title{color:var(--gold);font-weight:700;font-size:16px;margin-top:10px;margin-bottom:6px}
+        .waiting-text{font-size:12px;color:var(--text2);line-height:1.6}
+        .link-group{font-size:11px;margin-top:10px}
+        .link-group a{color:#58a6ff;text-decoration:none;margin-right:16px}
+        .link-group a:hover{text-decoration:underline}
+    </style>
 </head>
 <body>
-
-<div class="header">
-  <div class="header-left">
-    <div class="hlogo">🏈</div>
-    <div>
-      <div class="htitle-main">The Pipeline <span>2026</span> Application</div>
-      <div class="htitle-sub">Walk-Forward Validated · 60.0% over 1,359 real games (2021–2025)</div>
-    </div>
-    <div class="hlive">LIVE</div>
-  </div>
-  <div class="header-right">
-    <div class="hdate" id="hdate">—</div>
-    <div class="hsub">Season opens: <span>September 2026</span></div>
-  </div>
-</div>
-
-<div class="nav-group">
-  <div class="nav-label">🤖 Automated — Pipeline Output</div>
-  <div class="nav nav-auto">
-    <div class="ntab auto-tab active" onclick="show(0)">📋 Weekly Picks</div>
-    <div class="ntab auto-tab" onclick="show(1)">⛅ Weather</div>
-    <div class="ntab auto-tab" onclick="show(2)">⚡ Lightning</div>
-    <div class="ntab auto-tab" onclick="show(3)">🏆 Pool Tracker</div>
-    <div class="ntab auto-tab" onclick="show(4)">💰 Bankroll</div>
-    <div class="ntab auto-tab" onclick="show(5)">📊 Season Summary</div>
-  </div>
-  <div class="nav-sep"></div>
-  <div class="nav-label">🛠️ Manual — Backup Calculator</div>
-  <div class="nav">
-    <div class="ntab" onclick="show(6)">📋 Game Entry</div>
-    <div class="ntab" onclick="show(7)">🏆 Weekly Pool</div>
-    <div class="ntab" onclick="show(8)">📊 Score Reference</div>
-    <div class="ntab" onclick="show(9)">👨‍⚖️ Referee Lookup</div>
-    <div class="ntab" onclick="show(10)">🍀 Luck Flags</div>
-    <div class="ntab" onclick="show(11)">🛍️ Affiliates</div>
-    <div class="ntab" onclick="show(12)">📈 Backtest Results</div>
-  </div>
-</div>
-
-<!-- ═══ WELCOME BANNERS ═══ -->
-<div style="margin:12px 28px 0">
-  <div style="background:rgba(0,188,212,0.12);border:2px solid #00BCD4;border-radius:8px;padding:14px 18px;font-size:11px;line-height:1.9;color:#00BCD4;margin-bottom:8px">
-    <strong style="font-size:13px">⚠️ DISCLAIMER:</strong><br>
-    This app is intended for entertainment purposes only and does not offer real-money gambling or an opportunity to win real money or prizes. Practice or success with sports analysis does not imply future success at real-money gambling.<br><br>
-    <strong>🆘 RESPONSIBLE PLAY:</strong> Free confidential help 24/7 — US/Canada: <strong>1-800-GAMBLER</strong> · UK: <strong>0808 8020 133</strong> · Australia: <strong>1800 858 858</strong>
-  </div>
-  <div style="background:rgba(56,139,253,0.1);border:1px solid rgba(56,139,253,0.35);border-radius:8px;padding:14px 18px;font-size:11px;line-height:1.9;color:#8ec5ff;margin-bottom:8px">
-    <strong style="color:#388bfd;font-size:12px">🔒 PRIVACY POLICY</strong><br>
-    Your picks are stored <strong>locally on your device only</strong>. We do not sell, share, or transmit your personal data. No payment information is stored by this app — billing is handled securely by <strong>Google Play</strong> or <strong>Apple App Store</strong>.<br>
-    <a href="https://github.com/thepipelinenfl-cloud/THEPIPELINEEDGE/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener noreferrer" style="color:#388bfd;font-weight:700">View Full Privacy Policy ↗</a>
-  </div>
-  <div style="background:rgba(240,168,46,0.1);border:1px solid rgba(240,168,46,0.4);border-radius:8px;padding:14px 18px;font-size:11px;line-height:1.9;color:#c9a84c;margin-bottom:8px">
-    <strong style="color:#f0a82e;font-size:12px">⭐ EDGE PRO — $5.55 for 5 Months</strong><br>
-    Unlock enhanced Pipeline features. Cancel anytime through your app store account settings. The <strong>free version</strong> core features remain available at no cost — no credit card required.<br>
-    <a href="https://www.amazon.com/?tag=thepipelinenf-20" target="_blank" rel="noopener noreferrer" style="color:#f0a82e;font-weight:700">🛍️ Shop NFL Gear on Amazon ↗</a>
-  </div>
-</div>
-
-<!-- PANE 0: WEEKLY PICKS -->
-<div class="pane active" id="pane0">
-  <div class="mode-banner auto">🤖 AUTOMATED MODE — THE Pipeline fills this every Wednesday</div>
-  <div class="week-header" id="weekHeader">
-    <div>
-      <div class="week-badge" id="weekBadge">Waiting for Season</div>
-      <div class="week-meta" id="weekMeta">THE Pipeline will fill this in every Wednesday</div>
-    </div>
-    <div class="week-status">
-      <span class="status-pill status-waiting" id="weekStatusPill">⏳ Pre-Season</span>
-    </div>
-  </div>
-  <div id="picksArea">
-    <div class="empty-state">
-      <div class="empty-title">🏈 Picks Posted Here Every Wednesday</div>
-      <div class="empty-desc">THE Pipeline pulls the full schedule, injury reports, and referee assignments automatically. Every Wednesday when the season starts, just open a new chat in the NFL Edge 2026 project and say:</div>
-      <div class="empty-cmd">"Run Week [X] picks"</div>
-      <div class="empty-desc" style="margin-top:12px">THE Pipeline will post the full ranked picks list here — all 16 games sorted by confidence, with injury flags, referee adjustments, and any $5 ML bets highlighted.<br><br><strong style="color:var(--text)">You only need to:</strong> submit the pool picks and place any flagged bets.</div>
-    </div>
-  </div>
-  <div id="picksTable" style="display:none">
-    <div class="note-amber" id="weekNote"></div>
-    <div style="overflow-x:auto;border-radius:10px;border:1px solid var(--border)">
-      <table class="picks-table">
-        <thead><tr><th>Pool Pts</th><th>Matchup</th><th>Pick</th><th style="text-align:center">Conf</th><th style="text-align:center">Edge</th><th>Flags</th><th>ML Bet</th></tr></thead>
-        <tbody id="picksBody"></tbody>
-      </table>
-    </div>
-    <div id="mlSummary" class="note-green" style="margin-top:12px;display:none"></div>
-    <div id="dropSummary" class="note-red" style="margin-top:8px;display:none"></div>
-  </div>
-</div>
-
-<!-- PANE 1: WEATHER -->
-<div class="pane" id="pane1">
-  <div class="mode-banner manual">⛅ WEATHER — Live conditions for every outdoor stadium</div>
-  <div class="stitle">Stadium Weather — Game Day Conditions</div>
-  <div class="note-amber" style="margin-bottom:16px">Dome stadiums are weather-neutral. Outdoor stadiums: wind &gt;15mph or temp &lt;32°F triggers −1 confidence adjustment.</div>
-  <div class="cards" style="margin-bottom:16px">
-    <div class="card"><div class="card-lbl">Dome Stadiums</div><div class="card-val c-blue">11</div><div class="card-sub">ARI ATL DAL DET HOU IND LAC LAR LVR MIN NO</div></div>
-    <div class="card"><div class="card-lbl">Outdoor Stadiums</div><div class="card-val c-amber">21</div><div class="card-sub">Weather affects confidence score</div></div>
-    <div class="card"><div class="card-lbl">Wind Threshold</div><div class="card-val c-red">&gt;15 mph</div><div class="card-sub">−1 conf on passing teams</div></div>
-    <div class="card"><div class="card-lbl">Cold Threshold</div><div class="card-val c-red">&lt;32°F</div><div class="card-sub">−1 conf on road team</div></div>
-  </div>
-  <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px">
-    <button class="btn btn-gold" onclick="loadAllWeather()">⛅ Load Weather</button>
-    <span id="weather-status" style="font-size:11px;color:var(--text2)"></span>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px" id="weather-grid">
-    <div style="text-align:center;padding:40px;color:var(--text3);grid-column:1/-1">Click Load Weather to fetch live conditions</div>
-  </div>
-</div>
-
-<!-- PANE 2: LIGHTNING -->
-<div class="pane" id="pane2">
-  <div class="mode-banner manual">⚡ LIGHTNING — Free live tracker workflow</div>
-  <div class="stitle">Lightning Tracker — Free Live Check</div>
-  <div class="note-red" style="margin-bottom:16px">Use the free live lightning map before lock and during storm games.</div>
-  <div class="cards">
-    <div class="card"><div class="card-lbl">Primary Alert</div><div class="card-val c-red">8 Miles</div><div class="card-sub">Delay / suspension risk zone</div></div>
-    <div class="card"><div class="card-lbl">Monitor Zone</div><div class="card-val c-amber">10 Miles</div><div class="card-sub">Storm watch zone</div></div>
-    <div class="card"><div class="card-lbl">Pipeline Rule</div><div class="card-val c-gold">Manual Check</div><div class="card-sub">Verify before kickoff</div></div>
-  </div>
-  <div class="box">
-    <div class="box-title">Open Live Lightning Map</div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
-      <a class="btn btn-gold" href="https://www.lightningmaps.org/" target="_blank" rel="noopener noreferrer" style="text-decoration:none">⚡ Open LightningMaps.org</a>
-      <a class="btn btn-outline" href="https://www.lightningmaps.org/#m=oss;t=3;s=0;o=0;b=;n=0;y=31.9686;x=-99.9018;z=4;d=2;dl=2;dc=0;" target="_blank" rel="noopener noreferrer" style="text-decoration:none">Open U.S. View</a>
-    </div>
-    <div class="note" style="margin:0">Best workflow: open the live map, zoom to the game city, then judge whether strikes are inside the 8–10 mile danger area.</div>
-  </div>
-</div>
-
-<!-- PANE 3: POOL TRACKER -->
-<div class="pane" id="pane3">
-  <div class="mode-banner auto">🤖 AUTOMATED MODE — Log your weekly results here</div>
-  <div class="stitle">Pool Tracker</div>
-  <div class="cards">
-    <div class="card"><div class="card-lbl">Season Record</div><div class="card-val c-green" id="t-record">—</div><div class="card-sub">All picks</div></div>
-    <div class="card"><div class="card-lbl">Win Rate</div><div class="card-val c-green" id="t-pct">—</div><div class="card-sub">This season</div></div>
-    <div class="card"><div class="card-lbl">Pool Points</div><div class="card-val c-gold" id="t-pts">—</div><div class="card-sub">Total earned</div></div>
-    <div class="card"><div class="card-lbl">Best Week</div><div class="card-val c-amber" id="t-best">—</div><div class="card-sub">Points in a week</div></div>
-    <div class="card"><div class="card-lbl">Weeks Played</div><div class="card-val c-blue" id="t-weeks">0</div><div class="card-sub">of 18</div></div>
-    <div class="card"><div class="card-lbl">Current Streak</div><div class="card-val" id="t-streak">—</div><div class="card-sub">W or L</div></div>
-  </div>
-  <div class="g2">
-    <div class="box">
-      <div class="box-title">Log a Week's Result</div>
-      <div style="display:grid;gap:10px">
-        <div class="result-form">
-          <div class="form-group"><label>Week</label><select id="log-week"><option>Week 1</option><option>Week 2</option><option>Week 3</option><option>Week 4</option><option>Week 5</option><option>Week 6</option><option>Week 7</option><option>Week 8</option><option>Week 9</option><option>Week 10</option><option>Week 11</option><option>Week 12</option><option>Week 13</option><option>Week 14</option><option>Week 15</option><option>Week 16</option><option>Week 17</option><option>Week 18</option></select></div>
-          <div class="form-group"><label>Games Won</label><input type="number" id="log-wins" min="0" max="16" placeholder="e.g. 11"></div>
-          <div class="form-group"><label>Games Lost</label><input type="number" id="log-losses" min="0" max="16" placeholder="e.g. 5"></div>
-          <div class="form-group"><label>Pool Points Earned</label><input type="number" id="log-pool" min="0" placeholder="e.g. 94"></div>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">⚡</div>
+            <div>
+                <div class="title-main">THE PIPELINE <span>2026</span> APPLICATION</div>
+                <div class="title-sub">Walk-Forward Validated • 60.0% over 1,359 real games (2021-2025)</div>
+            </div>
         </div>
-        <div class="form-group"><label>Notes (optional)</label><input type="text" id="log-notes" placeholder="e.g. Missed KC injury flag"></div>
-        <button class="btn btn-green" onclick="logWeek()" style="width:100%">Log This Week</button>
-      </div>
-    </div>
-    <div class="box">
-      <div class="box-title">Weekly Log</div>
-      <div class="tbl-wrap" style="border:none"><table>
-        <thead><tr><th>Week</th><th>W</th><th>L</th><th>Win%</th><th>Pool Pts</th><th>Notes</th></tr></thead>
-        <tbody id="weekLog"><tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px">No weeks logged yet</td></tr></tbody>
-      </table></div>
-    </div>
-  </div>
-</div>
-
-<!-- PANE 4: BANKROLL -->
-<div class="pane" id="pane4">
-  <div class="mode-banner auto">🤖 AUTOMATED MODE — Track your $5 flat ML bets</div>
-  <div class="stitle">Bankroll — $5 Flat ML Bets</div>
-  <div class="note-amber">Every cash bet is <strong>$5 flat moneyline only</strong>. No parlays. No teasers. Only games scored 12+ confidence qualify.</div>
-  <div class="cards">
-    <div class="card"><div class="card-lbl">ML Bets Placed</div><div class="card-val c-blue" id="b-placed">0</div></div>
-    <div class="card"><div class="card-lbl">ML Wins</div><div class="card-val c-green" id="b-wins">0</div></div>
-    <div class="card"><div class="card-lbl">ML Losses</div><div class="card-val c-red" id="b-losses">0</div></div>
-    <div class="card"><div class="card-lbl">Total Outlay</div><div class="card-val c-amber" id="b-outlay">$0</div><div class="card-sub">$5 per bet</div></div>
-    <div class="card"><div class="card-lbl">Total Returns</div><div class="card-val c-green" id="b-returns">$0</div></div>
-    <div class="card"><div class="card-lbl">Net P/L</div><div class="card-val" id="b-net">$0</div></div>
-  </div>
-  <div class="g2">
-    <div class="box">
-      <div class="box-title">Log a Bet Result</div>
-      <div style="display:grid;gap:10px">
-        <div class="result-form">
-          <div class="form-group"><label>Week</label><select id="bet-week"><option>Week 1</option><option>Week 2</option><option>Week 3</option><option>Week 4</option><option>Week 5</option><option>Week 6</option><option>Week 7</option><option>Week 8</option><option>Week 9</option><option>Week 10</option><option>Week 11</option><option>Week 12</option><option>Week 13</option><option>Week 14</option><option>Week 15</option><option>Week 16</option><option>Week 17</option><option>Week 18</option></select></div>
-          <div class="form-group"><label>Game</label><input type="text" id="bet-game" placeholder="e.g. KC @ BUF"></div>
-          <div class="form-group"><label>Team Picked</label><input type="text" id="bet-pick" placeholder="e.g. BUF"></div>
-          <div class="form-group"><label>ML Odds</label><input type="text" id="bet-odds" placeholder="e.g. -145"></div>
-          <div class="form-group"><label>Result</label><select id="bet-result"><option value="W">Win ✓</option><option value="L">Loss ✗</option></select></div>
-          <div class="form-group"><label>Return ($)</label><input type="number" id="bet-return" step="0.01" placeholder="Amount returned"></div>
+        <div class="header-right">
+            <div class="hlive"><span class="hlive-dot"></span> LIVE</div>
+            <div class="hdate"><div id="hdate"></div><div id="htime"></div></div>
         </div>
-        <button class="btn btn-green" onclick="logBet()" style="width:100%">Log Bet</button>
-      </div>
     </div>
-    <div class="box">
-      <div class="box-title">Bet Log</div>
-      <div class="tbl-wrap" style="border:none"><table>
-        <thead><tr><th>Wk</th><th>Game</th><th>Pick</th><th>Odds</th><th>Result</th><th>Net</th></tr></thead>
-        <tbody id="betLog"><tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px">No bets logged yet</td></tr></tbody>
-      </table></div>
+
+    <div class="error-banner" id="errorBanner">
+        ⚠️ THE PIPELINE IS CLOGGED — Check your internet connection
     </div>
-  </div>
-</div>
 
-<!-- PANE 5: SEASON SUMMARY -->
-<div class="pane" id="pane5">
-  <div class="mode-banner auto">🤖 AUTOMATED MODE — Running season totals</div>
-  <div class="stitle">Season Summary — 2026</div>
-  <div class="cards">
-    <div class="card"><div class="card-lbl">Overall Record</div><div class="card-val c-green" id="s-record">—</div></div>
-    <div class="card"><div class="card-lbl">Win Rate</div><div class="card-val c-green" id="s-pct">—</div><div class="card-sub">vs 58.1% baseline</div></div>
-    <div class="card"><div class="card-lbl">ML Record</div><div class="card-val c-blue" id="s-ml">—</div><div class="card-sub">12+ confidence games</div></div>
-    <div class="card"><div class="card-lbl">Net P/L</div><div class="card-val" id="s-net">$0</div><div class="card-sub">$5 flat bets</div></div>
-  </div>
-  <div class="box">
-    <div class="box-title">Week by Week Performance</div>
-    <div id="weekBars"><div style="color:var(--text3);font-size:12px;padding:20px 0;text-align:center">Results will appear here as you log each week</div></div>
-  </div>
-  <div class="locked-bar">Good luck. The work is done. <span>Trust the system.</span> 🏈</div>
-</div>
+    <div class="container">
+        <!-- AUTOMATED SECTION -->
+        <div class="panel">
+            <div class="panel-title">⚙️ AUTOMATED — PIPELINE OUTPUT</div>
+            <div class="button-group">
+                <button class="btn" onclick="checkConnection('Weekly Picks')">Weekly Picks</button>
+                <button class="btn" onclick="checkConnection('Weather')">Weather</button>
+                <button class="btn" onclick="checkConnection('Lightning')">Lightning</button>
+                <button class="btn" onclick="checkConnection('Pool Tracker')">Pool Tracker</button>
+                <button class="btn" onclick="checkConnection('Bankroll')">Bankroll</button>
+                <button class="btn" onclick="checkConnection('Season Summary')">Season Summary</button>
+            </div>
+        </div>
 
-<!-- PANE 6: GAME ENTRY -->
-<div class="pane" id="pane6">
-  <div class="mode-banner manual">🛠️ MANUAL BACKUP MODE — Enter game details yourself</div>
-  <div class="stitle">Game Entry — Confidence Calculator</div>
-  <div class="tier3-bar" id="tier3Bar">⛔ TIER 3 INJURY DETECTED — Drop this game. Assign 1 pt, pick home team by default.</div>
-  <div class="g2">
-    <div class="box">
-      <div class="box-title">Game Inputs</div>
-      <div class="g2" style="gap:10px">
-        <div class="form-group"><label>Away Team</label><select id="awayTeam"><option value="">--</option></select></div>
-        <div class="form-group"><label>Home Team</label><select id="homeTeam"><option value="">--</option></select></div>
-      </div>
-      <label>Proprietary Blend Differential (Home − Away, include +1.75 HFA)</label>
-      <input type="number" id="kpDiff" placeholder="e.g. 3.5" step="0.1" oninput="calc()">
-      <label>Models Agreeing (of 6)</label>
-      <select id="models" onchange="calc()">
-        <option value="2">6 of 6 — Maximum consensus (+2)</option>
-        <option value="1">5 of 6 (+1)</option>
-        <option value="0" selected>4 of 6 — Minimum qualifier (0)</option>
-        <option value="-2">3 or fewer — Does not qualify (−2)</option>
-      </select>
-      <label>Referee Crew</label>
-      <select id="refSel" onchange="calc()"><option value="0">-- Select --</option></select>
+        <!-- MANUAL SECTION -->
+        <div class="panel">
+            <div class="panel-title">🔧 MANUAL — BACKUP CALCULATOR</div>
+            <div class="button-group">
+                <button class="btn" onclick="checkConnection('Game Entry')">Game Entry</button>
+                <button class="btn" onclick="checkConnection('Weekly Pool')">Weekly Pool</button>
+                <button class="btn" onclick="checkConnection('Score Reference')">Score Reference</button>
+                <button class="btn" onclick="checkConnection('Referee Lookup')">Referee Lookup</button>
+                <button class="btn" onclick="checkConnection('Luck Flags')">Luck Flags</button>
+                <button class="btn" onclick="checkConnection('Affiliates')">Affiliates</button>
+                <button class="btn" onclick="checkConnection('Backtest Results')">Backtest Results</button>
+            </div>
+        </div>
+
+        <!-- DISCLAIMER -->
+        <div class="panel">
+            <div class="disclaimer">
+                <div class="disclaimer-title">⚠️ DISCLAIMER:</div>
+                <div class="disclaimer-text">
+                    This app is intended for entertainment purposes only and does not offer real-money gambling or an opportunity to win real money or prizes. Practice or success with sports analysis does not imply future success at real-money gambling.
+                </div>
+                <div class="responsible-play">
+                    <strong>RESPONSIBLE PLAY:</strong> Free confidential help 24/7 — US/Canada: 1-800-GAMBLER | UK: 0908 8020 133 | Australia: 1800 858 858
+                </div>
+            </div>
+        </div>
+
+        <!-- PRIVACY POLICY -->
+        <div class="panel">
+            <div class="privacy">
+                <div class="privacy-title">🔒 PRIVACY POLICY</div>
+                <div class="privacy-text">
+                    Your picks are stored <strong>locally on your device only</strong>. We do not sell, share, or transmit your personal data. No payment information is stored by this app — billing is handled securely by Google Play or Apple App Store.
+                    <div style="margin-top:8px;"><a href="#privacy">View Full Privacy Policy →</a></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EDGE PRO -->
+        <div class="panel">
+            <div class="promo">
+                <div class="promo-title">⭐ EDGE PRO — $5.55 for 5 Months</div>
+                <div class="promo-text">
+                    Unlock enhanced Pipeline features. Cancel anytime through your app store account settings. The free version core features remain available at no cost — no credit card required.
+                </div>
+                <button class="promo-btn" onclick="checkConnection('Get EDGE PRO')">Get EDGE PRO</button>
+                <div class="link-group">
+                    <a href="#shop">Shop NFL Gear on Amazon →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- AUTOMATED MODE NOTICE -->
+        <div class="panel">
+            <div class="panel-title">🤖 AUTOMATED MODE — The Pipeline fills this every Wednesday</div>
+            <div class="auto-notice">
+                <div class="auto-notice-title">WAITING FOR SEASON</div>
+                <div class="waiting-title">NFL Season Opens September 2026</div>
+                <div class="waiting-text">Weekly automated updates begin when the 2025 NFL season starts. Stay tuned!</div>
+            </div>
+        </div>
     </div>
-    <div class="box">
-      <div class="box-title">Filters</div>
-      <label>Injury — Home Team</label>
-      <select id="injH" onchange="calc()">
-        <option value="0">Tier 0/1 — No change</option>
-        <option value="-2">Tier 2 — Starter questionable (−2)</option>
-        <option value="drop">Tier 3 — QB or 2+ starters OUT → DROP</option>
-      </select>
-      <label>Injury — Away Team</label>
-      <select id="injA" onchange="calc()">
-        <option value="0">Tier 0/1 — No change</option>
-        <option value="-1">Tier 2 — Starter questionable (−1)</option>
-        <option value="drop">Tier 3 — QB or 2+ starters OUT → DROP</option>
-      </select>
-      <label>Luck Adjustment</label>
-      <select id="luck" onchange="calc()">
-        <option value="0">Neutral (within ±1.0 wins)</option>
-        <option value="1">Picking AGAINST luck surplus &gt;+1.5 (+1)</option>
-        <option value="-1">Picking WITH high-luck team &gt;+2.0 (−1)</option>
-      </select>
-      <label>2-Min Warning Flag</label>
-      <select id="twoMin" onchange="calc()">
-        <option value="0">None</option>
-        <option value="-1">Opponent had 5+ 4QC wins (−1)</option>
-        <option value="1">Sep Wks 1–4 underdog pick (+1)</option>
-      </select>
-    </div>
-  </div>
-  <div class="box">
-    <div class="box-title">Confidence Score Result</div>
-    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:16px">
-      <div class="card" style="text-align:center;padding:12px"><div class="card-lbl">Base L1</div><div class="card-val c-gold" id="r1">—</div></div>
-      <div class="card" style="text-align:center;padding:12px"><div class="card-lbl">Consensus L2</div><div class="card-val c-blue" id="r2">—</div></div>
-      <div class="card" style="text-align:center;padding:12px"><div class="card-lbl">Referee L3</div><div class="card-val" id="r3" style="color:var(--teal2)">—</div></div>
-      <div class="card" style="text-align:center;padding:12px"><div class="card-lbl">Injury L4</div><div class="card-val c-red" id="r4">—</div></div>
-      <div class="card" style="text-align:center;padding:12px"><div class="card-lbl">Luck L5</div><div class="card-val c-green" id="r5">—</div></div>
-      <div class="card" style="text-align:center;padding:12px"><div class="card-lbl">2-Min L6</div><div class="card-val c-amber" id="r6">—</div></div>
-    </div>
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-      <span style="font-size:11px;color:var(--text3);width:16px">0</span>
-      <div class="conf-track" style="height:8px"><div class="conf-fill-bar" id="cBar" style="width:0%;background:var(--gold)"></div></div>
-      <span style="font-size:11px;color:var(--text3);width:22px">14</span>
-      <div class="score-big" id="scoreDisplay" style="color:var(--gold);margin-left:12px">—</div>
-      <span style="font-size:13px;color:var(--text3)">/14</span>
-    </div>
-    <div id="resultMsg" style="padding:12px 16px;border-radius:8px;border:1px solid var(--border);font-weight:600;font-size:13px;text-align:center;margin-bottom:14px;color:var(--text2)">Enter game details above</div>
-    <div style="display:flex;gap:10px">
-      <button class="btn btn-gold" onclick="addToPool()">+ Add to Pool</button>
-      <button class="btn btn-outline" onclick="clearForm()">Clear</button>
-    </div>
-  </div>
-</div>
 
-<!-- PANE 7: WEEKLY POOL -->
-<div class="pane" id="pane7">
-  <div class="mode-banner manual">🛠️ MANUAL BACKUP MODE — Rank your picks manually</div>
-  <div class="stitle">Weekly Pool — <span id="poolWeekLabel" style="color:var(--gold)">Rank 16→1</span></div>
-  <div class="note-amber">Assign confidence 16 down to 1. Every game gets a unique number. Tier 3 injury = assign 1, pick home team.</div>
-  <div style="display:flex;gap:10px;margin-bottom:16px">
-    <select id="weekSel" style="width:140px;margin:0"><option>Week 1</option><option>Week 2</option><option>Week 3</option><option>Week 4</option><option>Week 5</option><option>Week 6</option><option>Week 7</option><option>Week 8</option><option>Week 9</option><option>Week 10</option><option>Week 11</option><option>Week 12</option><option>Week 13</option><option>Week 14</option><option>Week 15</option><option>Week 16</option><option>Week 17</option><option>Week 18</option></select>
-    <button class="btn btn-blue" onclick="autoRank()">Auto-Rank 16→1</button>
-    <button class="btn btn-outline" onclick="clearPool()">Clear All</button>
-  </div>
-  <div class="tbl-wrap"><table>
-    <thead><tr><th>Pool Pts</th><th>Matchup</th><th>Conf Score</th><th>Track</th><th></th></tr></thead>
-    <tbody id="poolBody"><tr><td colspan="5" style="text-align:center;color:var(--text3);padding:32px">No games added yet — use Game Entry tab</td></tr></tbody>
-  </table></div>
-  <div id="poolFooter" style="margin-top:10px;font-size:11px;color:var(--text3)"></div>
-</div>
+    <script>
+        // Update date/time
+        function updateDateTime() {
+            const now = new Date();
+            const dayOptions = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit' };
+            document.getElementById('hdate').textContent = now.toLocaleDateString('en-US', dayOptions);
+            document.getElementById('htime').textContent = now.toLocaleTimeString('en-US', timeOptions);
+        }
 
-<!-- PANE 8: SCORE REFERENCE -->
-<div class="pane" id="pane8">
-  <div class="mode-banner manual">🛠️ MANUAL BACKUP MODE — Score reference guide</div>
-  <div class="stitle">Confidence Score — 6-Layer System</div>
-  <div class="g2">
-    <div class="box">
-      <div class="box-title">Layer Reference</div>
-      <div class="tbl-wrap" style="border:none"><table>
-        <thead><tr><th>Layer</th><th>Component</th><th>Range</th></tr></thead>
-        <tbody>
-          <tr><td><span class="badge b-gold">1</span></td><td>Proprietary Blend edge (base)</td><td class="mono c-gold">1 – 10</td></tr>
-          <tr><td><span class="badge b-blue">2</span></td><td>Model consensus</td><td class="mono c-blue">−2 to +2</td></tr>
-          <tr><td><span class="badge b-gray">3</span></td><td>Referee crew adjustment</td><td class="mono" style="color:var(--teal2)">−2 to +2</td></tr>
-          <tr><td><span class="badge b-red">4</span></td><td>Injury tier</td><td class="mono c-red">−2 to 0</td></tr>
-          <tr><td><span class="badge b-green">5</span></td><td>Luck factor</td><td class="mono c-green">−1 to +1</td></tr>
-          <tr><td><span class="badge b-amber">6</span></td><td>2-minute warning flag</td><td class="mono c-amber">−1 to +1</td></tr>
-          <tr style="background:rgba(240,168,46,0.08)"><td colspan="2" style="color:var(--gold);font-weight:600">TOTAL — hard cap 14 maximum</td><td class="mono c-gold">1 – 14</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div class="box">
-      <div class="box-title">Confidence Tier Meaning</div>
-      <div style="display:grid;gap:10px">
-        <div style="background:rgba(46,160,67,0.08);border:1px solid rgba(46,160,67,0.2);border-radius:8px;padding:14px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--green2)">12 – 14</div><div style="font-size:11px;color:var(--green2);font-weight:600">★ QUALIFIES</div></div>
-        <div style="background:rgba(56,139,253,0.08);border:1px solid rgba(56,139,253,0.2);border-radius:8px;padding:14px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--blue2)">9 – 11</div><div style="font-size:11px;color:var(--blue2);font-weight:600">HIGH CONFIDENCE</div></div>
-        <div style="background:rgba(210,153,34,0.08);border:1px solid rgba(210,153,34,0.2);border-radius:8px;padding:14px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--amber2)">5 – 8</div><div style="font-size:11px;color:var(--amber2);font-weight:600">MID CONFIDENCE</div></div>
-        <div style="background:rgba(218,54,51,0.08);border:1px solid rgba(218,54,51,0.2);border-radius:8px;padding:14px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--red2)">1 – 4</div><div style="font-size:11px;color:var(--red2);font-weight:600">LOW CONFIDENCE</div></div>
-      </div>
-    </div>
-  </div>
-</div>
+        // Check connection
+        function checkConnection(feature) {
+            const errorBanner = document.getElementById('errorBanner');
+            
+            if (!navigator.onLine) {
+                errorBanner.classList.add('show');
+                alert('⚠️ THE PIPELINE IS CLOGGED!\n\nYou need an internet connection to access ' + feature + '.');
+                return false;
+            }
+            
+            errorBanner.classList.remove('show');
+            console.log('Loading: ' + feature);
+            return true;
+        }
 
-<!-- PANE 9: REFEREE LOOKUP -->
-<div class="pane" id="pane9">
-  <div class="mode-banner manual">🛠️ MANUAL BACKUP MODE — Referee crew data</div>
-  <div class="stitle">Referee Crew Adjustments</div>
-  <div class="note">Assignments usually post Tuesday or Wednesday. Positive adjustment helps the home side.</div>
-  <div class="tbl-wrap"><table>
-    <thead><tr><th>Referee</th><th>Flags/Gm</th><th>Home ATS%</th><th>Adj</th><th>Profile</th></tr></thead>
-    <tbody id="refBody"></tbody>
-  </table></div>
-</div>
+        // Listen for online/offline events
+        window.addEventListener('online', function() {
+            document.getElementById('errorBanner').classList.remove('show');
+            console.log('Connection restored!');
+        });
 
-<!-- PANE 10: LUCK FLAGS -->
-<div class="pane" id="pane10">
-  <div class="mode-banner manual">🛠️ MANUAL BACKUP MODE — Luck factor data</div>
-  <div class="stitle">Luck Factor — 2026 Flags</div>
-  <div class="g2" style="margin-bottom:16px">
-    <div class="note-green" style="margin:0">Green = bounce-back candidate</div>
-    <div class="note-red" style="margin:0">Red = regression risk</div>
-  </div>
-  <div class="tbl-wrap"><table>
-    <thead><tr><th>Team</th><th>2024 Luck</th><th>Pyth W</th><th>Actual W</th><th>Gap</th><th>2026 Flag</th></tr></thead>
-    <tbody id="luckBody"></tbody>
-  </table></div>
-</div>
+        window.addEventListener('offline', function() {
+            document.getElementById('errorBanner').classList.add('show');
+            console.log('Connection lost!');
+        });
 
-<!-- PANE 11: AFFILIATES -->
-<div class="pane" id="pane11">
-  <div class="mode-banner manual">🛍️ AFFILIATES — Shop and support The Pipeline</div>
-  <div class="stitle">Affiliates — Customer Shopping Links</div>
-  <div class="cards">
-    <div class="card">
-      <div class="card-lbl">Amazon Store</div>
-      <div class="card-val c-gold">Amazon</div>
-      <div class="card-sub">Store ID: thepipelinenf-20</div>
-      <div style="margin-top:14px"><a class="btn btn-gold" href="https://www.amazon.com/?tag=thepipelinenf-20" target="_blank" rel="noopener noreferrer" style="display:inline-flex;text-decoration:none">Open Amazon</a></div>
-    </div>
-    <div class="card">
-      <div class="card-lbl">Fanatics Shop</div>
-      <div class="card-val c-red">Fanatics</div>
-      <div class="card-sub">Add your tracking link when ready</div>
-      <div style="margin-top:14px"><a class="btn btn-gold" href="https://www.fanatics.com/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;text-decoration:none">Open Fanatics</a></div>
-    </div>
-  </div>
-</div>
-
-<!-- PANE 12: BACKTEST RESULTS -->
-<div class="pane" id="pane12">
-  <div class="mode-banner manual">🛠️ MANUAL BACKUP MODE — Historical validation</div>
-  <div class="stitle">Corrected Backtest — Walk-Forward Results</div>
-  <div class="cards">
-    <div class="card"><div class="card-lbl">True Accuracy</div><div class="card-val c-gold">60.0%</div><div class="card-sub">1,359 games · no leakage</div></div>
-    <div class="card"><div class="card-lbl">Best Season</div><div class="card-val c-green">65.1%</div><div class="card-sub">2024 · 177/272</div></div>
-    <div class="card"><div class="card-lbl">Worst Season</div><div class="card-val c-amber">57.0%</div><div class="card-sub">2023 · 155/272</div></div>
-    <div class="card"><div class="card-lbl">Seasons Tested</div><div class="card-val c-blue">5</div><div class="card-sub">2021 through 2025</div></div>
-  </div>
-  <div class="tbl-wrap" style="margin-bottom:16px"><table>
-    <thead><tr><th>Season</th><th>Train Data</th><th>Games</th><th>Correct</th><th>Accuracy</th><th>Note</th></tr></thead>
-    <tbody>
-      <tr><td>2021</td><td>2020 only</td><td>272</td><td>158</td><td><span class="badge b-gray">58.1%</span></td><td style="color:var(--text3)">1yr — thin baseline</td></tr>
-      <tr><td>2022</td><td>2020–2021</td><td>271</td><td>157</td><td><span class="badge b-gray">57.9%</span></td><td style="color:var(--text3)">2yr train</td></tr>
-      <tr><td>2023</td><td>2020–2022</td><td>272</td><td>155</td><td><span class="badge b-amber">57.0%</span></td><td style="color:var(--text3)">3yr train</td></tr>
-      <tr><td>2024</td><td>2020–2023</td><td>272</td><td>177</td><td><span class="badge b-green">65.1%</span></td><td style="color:var(--text3)">4yr — peak</td></tr>
-      <tr><td>2025</td><td>2020–2024</td><td>272</td><td>168</td><td><span class="badge b-green">61.8%</span></td><td style="color:var(--text3)">5yr train</td></tr>
-      <tr style="background:rgba(240,168,46,0.06)"><td style="color:var(--gold);font-weight:600">TOTAL</td><td style="color:var(--text3)">—</td><td style="color:var(--gold)">1,359</td><td style="color:var(--gold)">815</td><td><span class="badge b-gold">60.0%</span></td><td style="color:var(--text3)">Zero leakage</td></tr>
-    </tbody>
-  </table></div>
-  <div class="box">
-    <div class="box-title">Average Accuracy by Week</div>
-    <div id="backtestWeekBars"></div>
-  </div>
-  <div class="locked-bar">Good luck. The work is done. <span>Trust the system.</span> 🏈</div>
-</div>
-
-<script>
-const TEAMS=['ARI','ATL','BAL','BUF','CAR','CHI','CIN','CLE','DAL','DEN','DET','GB','HOU','IND','JAX','KC','LAC','LAR','LV','MIA','MIN','NE','NO','NYG','NYJ','PHI','PIT','SEA','SF','TB','TEN','WAS'];
-const REFS=[
-  {n:'Bill Vinovich',fl:12.8,ha:50,adj:+2,p:'Fewest flags, let-them-play, home favorites benefit'},
-  {n:'Adrian Hill',fl:14.8,ha:53,adj:+1,p:'Clean crew, consistent, slight home tilt'},
-  {n:'Brad Rogers',fl:16.3,ha:55,adj:+1,p:'DPI-heavy, slightly home-friendly'},
-  {n:'Craig Wrolstad',fl:14.2,ha:52,adj:+1,p:'Below avg flags, slight home tilt'},
-  {n:'John Hussey',fl:14.4,ha:51,adj:+1,p:'Neutral, consistent, below-avg flags'},
-  {n:'Land Clark',fl:14.1,ha:52,adj:+1,p:'Quiet, consistent, slightly home-friendly'},
-  {n:'Alan Eck',fl:13.9,ha:51,adj:+1,p:'Low flag volume, steady, neutral'},
-  {n:'Ron Torbert',fl:16.8,ha:51,adj:0,p:'Over crew, neutral home/road'},
-  {n:'Brad Allen',fl:15.6,ha:49,adj:0,p:'Near average across all categories'},
-  {n:'Alex Kemp',fl:14.9,ha:48,adj:0,p:'Higher facemask frequency, neutral'},
-  {n:'Alex Moore',fl:15.3,ha:49,adj:0,p:'New head ref 2025, near league average'},
-  {n:'Clay Martin',fl:15.2,ha:49,adj:-1,p:'Most offensive holding 2024'},
-  {n:'Shawn Hochuli',fl:15.8,ha:48,adj:-1,p:'Volatility, slight road tilt'},
-  {n:'Carl Cheffers',fl:17.8,ha:42,adj:-1,p:'DPI-heavy chaos, road dogs thrive'},
-  {n:'Clete Blakeman',fl:17.8,ha:44,adj:-1,p:'Most total flags 2024'},
-  {n:'Novak',fl:15.1,ha:40,adj:-2,p:'Worst home ATS record (37-55-3)'},
-  {n:'Shawn Smith',fl:15.9,ha:37,adj:-2,p:'Auto-1st down leader, strong road bias'},
-];
-const LUCK=[
-  {t:'KC',l:+5.1,py:9.9,ac:15,f:'Regression risk — historically luckiest ever tracked',d:'bad'},
-  {t:'MIN',l:+3.6,py:10.4,ac:14,f:'High fumble recovery luck + 7-1 close game record',d:'bad'},
-  {t:'DEN',l:+1.6,py:8.4,ac:10,f:'Modest regression risk — 4QC dependent',d:'bad'},
-  {t:'LVR',l:-2.9,py:6.9,ac:4,f:'Most unlucky 2024 — strong bounce-back candidate',d:'good'},
-  {t:'SF',l:-3.2,py:9.2,ac:6,f:'Very unlucky — injuries + fumble luck — bounce-back',d:'good'},
-  {t:'NYJ',l:-2.8,py:7.8,ac:5,f:'Prime bounce-back candidate',d:'good'},
-  {t:'HOU',l:-1.8,py:11.8,ac:10,f:'Should have been a 12-win team',d:'good'},
-  {t:'IND',l:-1.1,py:9.1,ac:8,f:'Unlucky close games — underrated entering 2026',d:'good'},
-  {t:'GB',l:+0.2,py:10.8,ac:11,f:'Neutral — ratings reflect true quality',d:'neutral'},
-  {t:'BAL',l:+0.1,py:11.1,ac:11,f:'Neutral — minimal luck residual',d:'neutral'},
-  {t:'DET',l:-0.4,py:14.4,ac:14,f:'Slightly unlucky — legitimately elite',d:'neutral'},
-  {t:'PHI',l:+0.8,py:13.2,ac:14,f:'Marginally lucky — strong team',d:'neutral'},
-  {t:'BUF',l:+0.3,py:12.7,ac:13,f:'Neutral — ratings accurate',d:'neutral'},
-];
-const WEEK_AVG=[52,54,48,53,51,65,58,69,61,63,72,62,74,64,67,59,67,59];
-const STADIUMS={ARI:{name:'State Farm Stadium',city:'Glendale, AZ',lat:33.5277,lon:-112.2626,dome:true},ATL:{name:'Mercedes-Benz Stadium',city:'Atlanta, GA',lat:33.7553,lon:-84.4006,dome:true},BAL:{name:'M&T Bank Stadium',city:'Baltimore, MD',lat:39.2781,lon:-76.6233,dome:false},BUF:{name:'Highmark Stadium',city:'Orchard Park, NY',lat:42.773,lon:-78.787,dome:false},CAR:{name:'Bank of America Stadium',city:'Charlotte, NC',lat:35.2258,lon:-80.8528,dome:false},CHI:{name:'Soldier Field',city:'Chicago, IL',lat:41.8623,lon:-87.6167,dome:false},CIN:{name:'Paycor Stadium',city:'Cincinnati, OH',lat:39.0955,lon:-84.516,dome:false},CLE:{name:'Huntington Bank Field',city:'Cleveland, OH',lat:41.5061,lon:-81.6995,dome:false},DAL:{name:'AT&T Stadium',city:'Arlington, TX',lat:32.7473,lon:-97.0945,dome:true},DEN:{name:'Empower Field at Mile High',city:'Denver, CO',lat:39.7439,lon:-105.0201,dome:false},DET:{name:'Ford Field',city:'Detroit, MI',lat:42.34,lon:-83.0456,dome:true},GB:{name:'Lambeau Field',city:'Green Bay, WI',lat:44.5013,lon:-88.0623,dome:false},HOU:{name:'NRG Stadium',city:'Houston, TX',lat:29.6849,lon:-95.4117,dome:true},IND:{name:'Lucas Oil Stadium',city:'Indianapolis, IN',lat:39.7601,lon:-86.1639,dome:true},JAX:{name:'EverBank Stadium',city:'Jacksonville, FL',lat:30.3239,lon:-81.6373,dome:false},KC:{name:'Arrowhead Stadium',city:'Kansas City, MO',lat:39.0489,lon:-94.4839,dome:false},LAC:{name:'SoFi Stadium',city:'Inglewood, CA',lat:33.9535,lon:-118.3392,dome:true},LAR:{name:'SoFi Stadium',city:'Inglewood, CA',lat:33.9535,lon:-118.3392,dome:true},LVR:{name:'Allegiant Stadium',city:'Las Vegas, NV',lat:36.0908,lon:-115.1839,dome:true},MIA:{name:'Hard Rock Stadium',city:'Miami Gardens, FL',lat:25.958,lon:-80.2389,dome:false},MIN:{name:'U.S. Bank Stadium',city:'Minneapolis, MN',lat:44.9738,lon:-93.2575,dome:true},NE:{name:'Gillette Stadium',city:'Foxborough, MA',lat:42.0909,lon:-71.2644,dome:false},NO:{name:'Caesars Superdome',city:'New Orleans, LA',lat:29.9511,lon:-90.0814,dome:true},NYG:{name:'MetLife Stadium',city:'East Rutherford, NJ',lat:40.8136,lon:-74.0744,dome:false},NYJ:{name:'MetLife Stadium',city:'East Rutherford, NJ',lat:40.8136,lon:-74.0744,dome:false},PHI:{name:'Lincoln Financial Field',city:'Philadelphia, PA',lat:39.9009,lon:-75.1675,dome:false},PIT:{name:'Acrisure Stadium',city:'Pittsburgh, PA',lat:40.4468,lon:-80.0158,dome:false},SEA:{name:'Lumen Field',city:'Seattle, WA',lat:47.5952,lon:-122.3316,dome:false},SF:{name:"Levi's Stadium",city:'Santa Clara, CA',lat:37.4033,lon:-121.9697,dome:false},TB:{name:'Raymond James Stadium',city:'Tampa, FL',lat:27.9759,lon:-82.5033,dome:false},TEN:{name:'Nissan Stadium',city:'Nashville, TN',lat:36.1665,lon:-86.7713,dome:false},WAS:{name:'Northwest Stadium',city:'Landover, MD',lat:38.9077,lon:-76.8646,dome:false}};
-
-(function(){
-  const n=new Date();
-  document.getElementById('hdate').textContent=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+' — '+n.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
-  TEAMS.forEach(t=>{['awayTeam','homeTeam'].forEach(id=>{const o=document.createElement('option');o.value=t;o.textContent=t;document.getElementById(id).appendChild(o);});});
-  const rs=document.getElementById('refSel');
-  REFS.forEach(r=>{const o=document.createElement('option');o.value=r.adj;o.textContent=`${r.n} (${r.adj>0?'+':''}${r.adj})`;rs.appendChild(o);});
-  buildRefTable();buildLuckTable();buildBacktestWeekBars();
-})();
-
-function show(n){
-  document.querySelectorAll('.pane').forEach((p,i)=>p.classList.toggle('active',i===n));
-  document.querySelectorAll('.ntab').forEach((t,i)=>t.classList.toggle('active',i===n));
-}
-
-function renderPicks(week,note,picks){
-  document.getElementById('picksArea').style.display='none';
-  document.getElementById('picksTable').style.display='block';
-  document.getElementById('weekBadge').textContent='Week '+week;
-  document.getElementById('weekMeta').textContent='Generated by THE Pipeline — '+new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-  document.getElementById('weekStatusPill').textContent='✅ Ready';
-  document.getElementById('weekStatusPill').className='status-pill status-ready';
-  if(note)document.getElementById('weekNote').textContent=note;
-  const mlGames=picks.filter(p=>p.isML);
-  const dropGames=picks.filter(p=>p.isDrop);
-  if(mlGames.length>0){const el=document.getElementById('mlSummary');el.style.display='block';el.innerHTML='★ <strong>'+mlGames.length+' game'+(mlGames.length>1?'s':'')+' qualify for $5 flat ML bet:</strong> '+mlGames.map(p=>'<strong>'+p.pick+'</strong> (conf '+p.conf+')').join(' | ');}
-  if(dropGames.length>0){const el=document.getElementById('dropSummary');el.style.display='block';el.innerHTML='⛔ <strong>'+dropGames.length+' DROPPED (Tier 3 injury):</strong> '+dropGames.map(p=>p.away+' @ '+p.home).join(' | ');}
-  document.getElementById('picksBody').innerHTML=picks.map((p,i)=>{
-    const cc=p.conf>=12?'var(--green2)':p.conf>=9?'var(--blue2)':p.conf>=5?'var(--amber2)':'var(--red2)';
-    const ec=p.edge>=2?'var(--green2)':p.edge>=0?'var(--blue2)':'var(--red2)';
-    const pc=p.poolPts>=14?'pts-gold':p.poolPts>=8?'pts-blue':'pts-gray';
-    const flags=[];if(p.ref)flags.push('🏛️ '+p.ref);if(p.injFlag)flags.push('🏥 '+p.injFlag);if(p.luckFlag)flags.push('🍀 '+p.luckFlag);
-    return `<tr class="${i<3?' tr-top':''}${p.isDrop?' opacity-40':''}"><td><div class="pool-pts ${pc}">${p.poolPts}</div></td><td class="matchup-cell"><div class="teams">${p.away} <span style="color:var(--text3)">@</span> ${p.home} → <span class="winner">${p.pick}</span></div><div class="meta">KP diff ${p.diff>=0?'+':''}${p.diff} | pool pts ${p.poolPts}/16</div></td><td><strong style="color:${cc}">${p.pick}</strong></td><td class="conf-cell"><div class="conf-num" style="color:${cc}">${p.isDrop?'DROP':p.conf}</div><div class="conf-bar"><div class="conf-fill" style="width:${Math.round(p.conf/14*100)}%;background:${cc}"></div></div></td><td class="edge-cell" style="color:${ec}">${p.edge>=0?'+':''}${p.edge}%</td><td class="flag-cell">${flags.map(f=>'<div class="flag-item">'+f+'</div>').join('')}</td><td>${p.isML?'<span class="ml-badge ml-yes">★ BET $5</span>':p.isDrop?'<span class="ml-badge ml-no">DROPPED</span>':'<span class="ml-badge ml-no">Pool only</span>'}</td></tr>`;
-  }).join('');
-}
-
-let weekLog=[];
-function logWeek(){
-  const week=document.getElementById('log-week').value;
-  const wins=parseInt(document.getElementById('log-wins').value)||0;
-  const losses=parseInt(document.getElementById('log-losses').value)||0;
-  const pts=parseInt(document.getElementById('log-pool').value)||0;
-  const notes=document.getElementById('log-notes').value;
-  weekLog.unshift({week,wins,losses,pts,notes});
-  renderWeekLog();updateTrackerStats();
-  ['log-wins','log-losses','log-pool','log-notes'].forEach(id=>{document.getElementById(id).value='';});
-}
-function renderWeekLog(){
-  const body=document.getElementById('weekLog');
-  if(!weekLog.length){body.innerHTML='<tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px">No weeks logged yet</td></tr>';return;}
-  body.innerHTML=weekLog.map(r=>{const t=r.wins+r.losses;const pct=t?(r.wins/t*100).toFixed(0)+'%':'—';const wc=r.wins>r.losses?'c-green':r.wins<r.losses?'c-red':'c-amber';return `<tr><td>${r.week.replace('Week','Wk')}</td><td class="c-green">${r.wins}</td><td class="c-red">${r.losses}</td><td class="${wc}">${pct}</td><td class="c-gold mono">${r.pts}</td><td style="font-size:11px;color:var(--text3)">${r.notes||'—'}</td></tr>`;}).join('');
-  renderWeekBars();
-}
-function updateTrackerStats(){
-  const totalW=weekLog.reduce((s,r)=>s+r.wins,0);const totalL=weekLog.reduce((s,r)=>s+r.losses,0);const totalT=totalW+totalL;const totalPts=weekLog.reduce((s,r)=>s+r.pts,0);const bestWk=weekLog.length?Math.max(...weekLog.map(r=>r.pts)):0;const pct=totalT?(totalW/totalT*100).toFixed(1)+'%':'—';
-  document.getElementById('t-record').textContent=totalT?totalW+'-'+totalL:'—';document.getElementById('t-pct').textContent=pct;document.getElementById('t-pts').textContent=totalPts||'—';document.getElementById('t-best').textContent=bestWk||'—';document.getElementById('t-weeks').textContent=weekLog.length;
-  let streak='—';if(weekLog.length){const last=weekLog[0];const type=last.wins>last.losses?'W':'L';let count=0;for(let r of weekLog){if((r.wins>r.losses&&type==='W')||(r.wins<r.losses&&type==='L'))count++;else break;}streak=count+type;}
-  const sel=document.getElementById('t-streak');sel.textContent=streak;sel.className='card-val '+(streak.endsWith('W')?'c-green':streak.endsWith('L')?'c-red':'');
-  document.getElementById('s-record').textContent=totalT?totalW+'-'+totalL:'—';document.getElementById('s-pct').textContent=pct;
-}
-function renderWeekBars(){
-  const cont=document.getElementById('weekBars');
-  if(!weekLog.length){cont.innerHTML='<div style="color:var(--text3);font-size:12px;padding:20px 0;text-align:center">Results will appear here as you log each week</div>';return;}
-  const sorted=[...weekLog].sort((a,b)=>parseInt(a.week.replace(/\D/g,''))-parseInt(b.week.replace(/\D/g,'')));
-  cont.innerHTML=sorted.map(r=>{const t=r.wins+r.losses;const pct=t?r.wins/t*100:0;const color=pct>=70?'var(--green2)':pct>=50?'var(--blue2)':'var(--red2)';return `<div class="wk-bar-row"><div class="wk-lbl">${r.week.replace('Week','Wk ')}</div><div class="wk-track"><div class="wk-fill" style="width:${pct}%;background:${color}"></div></div><div class="wk-val" style="color:${color}">${pct.toFixed(0)}%</div></div>`;}).join('');
-}
-
-let betLog=[];
-function logBet(){
-  const week=document.getElementById('bet-week').value;const game=document.getElementById('bet-game').value||'—';const pick=document.getElementById('bet-pick').value||'—';const odds=document.getElementById('bet-odds').value||'—';const result=document.getElementById('bet-result').value;const ret=parseFloat(document.getElementById('bet-return').value)||0;
-  betLog.unshift({week,game,pick,odds,result,ret});renderBetLog();updateBankroll();
-  ['bet-game','bet-pick','bet-odds','bet-return'].forEach(id=>document.getElementById(id).value='');
-}
-function renderBetLog(){
-  const body=document.getElementById('betLog');
-  if(!betLog.length){body.innerHTML='<tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px">No bets logged yet</td></tr>';return;}
-  body.innerHTML=betLog.map(r=>{const net=r.result==='W'?r.ret-5:-5;const nc=net>0?'c-green':'c-red';return `<tr><td style="font-size:11px;color:var(--text3)">${r.week.replace('Week','Wk')}</td><td>${r.game}</td><td><strong>${r.pick}</strong></td><td class="mono" style="color:var(--text2)">${r.odds}</td><td><span class="badge ${r.result==='W'?'b-green':'b-red'}">${r.result==='W'?'Win':'Loss'}</span></td><td class="${nc} mono">${net>=0?'+$'+net.toFixed(2):'-$'+Math.abs(net).toFixed(2)}</td></tr>`;}).join('');
-}
-function updateBankroll(){
-  const placed=betLog.length;const wins=betLog.filter(b=>b.result==='W').length;const losses=betLog.filter(b=>b.result==='L').length;const outlay=placed*5;const returns=betLog.reduce((s,b)=>s+(b.result==='W'?b.ret:0),0);const net=returns-outlay;
-  document.getElementById('b-placed').textContent=placed||0;document.getElementById('b-wins').textContent=wins;document.getElementById('b-losses').textContent=losses;document.getElementById('b-outlay').textContent='$'+outlay;document.getElementById('b-returns').textContent='$'+returns.toFixed(2);
-  const netEl=document.getElementById('b-net');netEl.textContent=(net>=0?'+$':'−$')+Math.abs(net).toFixed(2);netEl.className='card-val '+(net>0?'c-green':net<0?'c-red':'c-blue');
-  document.getElementById('s-net').textContent=(net>=0?'+$':'−$')+Math.abs(net).toFixed(2);document.getElementById('s-ml').textContent=wins+'-'+losses;
-}
-
-let pool=[];
-function getBase(d){const v=Math.abs(parseFloat(d)||0);if(v>=8)return 10;if(v>=6)return 8+Math.min(1,Math.floor((v-6)/0.5));if(v>=4)return 6+Math.min(1,Math.floor((v-4)/0.5));if(v>=2)return 4+Math.min(1,Math.floor((v-2)/0.5));return Math.max(1,Math.ceil(v/0.7));}
-function calc(){
-  const d=document.getElementById('kpDiff').value;const m=parseInt(document.getElementById('models').value);const r=parseInt(document.getElementById('refSel').value)||0;const ih=document.getElementById('injH').value;const ia=document.getElementById('injA').value;const l=parseInt(document.getElementById('luck').value)||0;const t=parseInt(document.getElementById('twoMin').value)||0;
-  const bar=document.getElementById('tier3Bar');const msg=document.getElementById('resultMsg');const sd=document.getElementById('scoreDisplay');const cb=document.getElementById('cBar');
-  if(ih==='drop'||ia==='drop'){bar.style.display='block';sd.textContent='DROP';sd.style.color='var(--red2)';msg.textContent='TIER 3 INJURY — Drop this game';msg.style.cssText='padding:12px 16px;border-radius:8px;border:1px solid var(--red);background:rgba(218,54,51,0.1);font-weight:600;font-size:13px;text-align:center;margin-bottom:14px;color:var(--red2)';cb.style.width='0%';['r1','r2','r3','r4','r5','r6'].forEach(id=>document.getElementById(id).textContent='—');return;}
-  bar.style.display='none';
-  if(!d){msg.textContent='Enter Proprietary Blend differential to calculate';msg.style.cssText='padding:12px 16px;border-radius:8px;border:1px solid var(--border);font-weight:600;font-size:13px;text-align:center;margin-bottom:14px;color:var(--text2)';sd.textContent='—';sd.style.color='var(--gold)';return;}
-  const base=getBase(d);const inj=(parseInt(ih)||0)+(parseInt(ia)||0);const total=Math.min(14,Math.max(1,base+m+r+inj+l+t));
-  document.getElementById('r1').textContent=base;document.getElementById('r2').textContent=(m>=0?'+':'')+m;document.getElementById('r3').textContent=(r>=0?'+':'')+r;document.getElementById('r4').textContent=(inj>=0?'+':'')+inj;document.getElementById('r5').textContent=(l>=0?'+':'')+l;document.getElementById('r6').textContent=(t>=0?'+':'')+t;
-  sd.textContent=total;cb.style.width=(total/14*100)+'%';
-  let color,txt,bg,bc;
-  if(total>=12){color='var(--green2)';bg='rgba(46,160,67,0.1)';bc='var(--green)';txt=`SCORE ${total}/14 — QUALIFIES ★`;}
-  else if(total>=9){color='var(--blue2)';bg='rgba(31,111,235,0.1)';bc='var(--blue)';txt=`SCORE ${total}/14 — High confidence`;}
-  else if(total>=5){color='var(--amber2)';bg='rgba(210,153,34,0.1)';bc='var(--amber)';txt=`SCORE ${total}/14 — Mid confidence`;}
-  else{color='var(--red2)';bg='rgba(218,54,51,0.1)';bc='var(--red)';txt=`SCORE ${total}/14 — Low confidence`;}
-  sd.style.color=color;cb.style.background=color;
-  msg.style.cssText=`padding:12px 16px;border-radius:8px;border:1px solid ${bc};background:${bg};font-weight:600;font-size:13px;text-align:center;margin-bottom:14px;color:${color}`;
-  msg.textContent=txt;
-}
-function addToPool(){
-  const away=document.getElementById('awayTeam').value;const home=document.getElementById('homeTeam').value;const score=parseInt(document.getElementById('scoreDisplay').textContent);
-  if(!away||!home||isNaN(score))return alert('Complete all fields first.');
-  const idx=pool.findIndex(p=>p.away===away&&p.home===home);const entry={away,home,score,poolPts:null};
-  if(idx>=0)pool[idx]=entry;else pool.push(entry);renderPool();show(7);
-}
-function clearForm(){
-  document.getElementById('kpDiff').value='';['awayTeam','homeTeam','models','refSel','injH','injA','luck','twoMin'].forEach(id=>{document.getElementById(id).selectedIndex=0;});
-  ['r1','r2','r3','r4','r5','r6'].forEach(id=>document.getElementById(id).textContent='—');
-  document.getElementById('scoreDisplay').textContent='—';document.getElementById('scoreDisplay').style.color='var(--gold)';document.getElementById('cBar').style.width='0%';
-  document.getElementById('resultMsg').textContent='Enter game details above';document.getElementById('resultMsg').style.cssText='padding:12px 16px;border-radius:8px;border:1px solid var(--border);font-weight:600;font-size:13px;text-align:center;margin-bottom:14px;color:var(--text2)';
-  document.getElementById('tier3Bar').style.display='none';
-}
-function autoRank(){pool.sort((a,b)=>b.score-a.score);pool.forEach((p,i)=>p.poolPts=pool.length-i);renderPool();}
-function clearPool(){if(confirm('Clear all picks?')){pool=[];renderPool();}}
-function renderPool(){
-  const body=document.getElementById('poolBody');const label=document.getElementById('poolWeekLabel');label.textContent=document.getElementById('weekSel').value;
-  if(!pool.length){body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:32px">No games added yet — use Game Entry tab</td></tr>';document.getElementById('poolFooter').innerHTML='';return;}
-  const sorted=[...pool].sort((a,b)=>(b.poolPts||0)-(a.poolPts||0)||(b.score-a.score));
-  body.innerHTML=sorted.map((p)=>{
-    const real=pool.indexOf(pool.find(x=>x.away===p.away&&x.home===p.home));const pts=p.poolPts||'?';const color=p.score>=12?'var(--green2)':p.score>=9?'var(--blue2)':p.score>=5?'var(--amber2)':'var(--red2)';const ptsClass=pts>=14?'b-gold':pts>=9?'b-blue':pts>=5?'b-gray':'b-red';
-    return `<tr><td><span class="badge ${ptsClass}" style="font-family:'Bebas Neue',sans-serif;font-size:18px;padding:4px 10px">${pts}</span></td><td><strong>${p.away}</strong> <span style="color:var(--text3)">@</span> <strong>${p.home}</strong></td><td><span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${color}">${p.score}</span><span style="color:var(--text3);font-size:11px">/14</span></td><td><div class="conf-track" style="width:80px"><div class="conf-fill-bar" style="width:${p.score/14*100}%;background:${color}"></div></div></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:11px" onclick="pool.splice(${real},1);renderPool()">✕</button></td></tr>`;
-  }).join('');
-  const assigned=pool.filter(p=>p.poolPts!==null).length;
-  document.getElementById('poolFooter').innerHTML=`${pool.length} games · ${assigned} ranked · ${pool.length-assigned} unranked · <a href="#" onclick="autoRank();return false" style="color:var(--gold)">Auto-rank now</a>`;
-}
-
-function buildRefTable(){const body=document.getElementById('refBody');REFS.forEach(r=>{const bg=r.adj>=2?'rgba(46,160,67,0.07)':r.adj===1?'rgba(46,160,67,0.03)':r.adj<=-2?'rgba(218,54,51,0.07)':r.adj===-1?'rgba(218,54,51,0.03)':'';const adjCls=r.adj>0?'ref-adj-pos':r.adj<0?'ref-adj-neg':'ref-adj-neu';body.innerHTML+=`<tr style="background:${bg}"><td><strong>${r.n}</strong></td><td class="mono">${r.fl}</td><td class="mono">${r.ha}%</td><td><span class="${adjCls}">${r.adj>0?'+':''}${r.adj}</span></td><td style="color:var(--text2);font-size:11px">${r.p}</td></tr>`;});}
-function buildLuckTable(){const body=document.getElementById('luckBody');LUCK.forEach(r=>{const bg=r.d==='bad'?'rgba(218,54,51,0.06)':r.d==='good'?'rgba(46,160,67,0.06)':'';const lc=r.d==='bad'?'b-red':r.d==='good'?'b-green':'b-gray';const gap=r.ac-r.py;body.innerHTML+=`<tr style="background:${bg}"><td><strong>${r.t}</strong></td><td><span class="badge ${lc}">${r.l>0?'+':''}${r.l}</span></td><td class="mono">${r.py}</td><td class="mono">${r.ac}</td><td><span class="badge ${gap>0?'b-red':'b-green'}">${gap>0?'+':''}${gap.toFixed(1)}</span></td><td style="color:var(--text2);font-size:11px">${r.f}</td></tr>`;});}
-function buildBacktestWeekBars(){const el=document.getElementById('backtestWeekBars');el.innerHTML=WEEK_AVG.map((v,i)=>{const color=v>=65?'var(--green2)':v>=57?'var(--blue2)':'var(--amber2)';return `<div class="wk-bar-row"><div class="wk-lbl">Wk ${i+1}</div><div class="wk-track"><div class="wk-fill" style="width:${(v-30)/70*100}%;background:${color}"></div></div><div class="wk-val" style="color:${color}">${v}%</div></div>`;}).join('');}
-
-async function loadAllWeather(){const grid=document.getElementById('weather-grid');const status=document.getElementById('weather-status');if(!grid||!status)return;const outdoor=Object.entries(STADIUMS).filter(([,s])=>!s.dome);const dome=Object.entries(STADIUMS).filter(([,s])=>s.dome);status.textContent='Loading '+outdoor.length+' outdoor stadiums...';grid.innerHTML='';grid.innerHTML=dome.map(([abbr,s])=>`<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-weight:700;font-size:13px">${abbr}</span><span style="background:rgba(31,111,235,0.15);color:var(--blue2);font-size:10px;padding:2px 7px;border-radius:4px">DOME</span></div><div style="font-size:11px;color:var(--text2)">${s.name}</div><div style="font-size:10px;color:var(--text3);margin-top:4px">${s.city}</div><div style="font-size:12px;color:var(--blue2);margin-top:8px;font-weight:600">Weather neutral</div></div>`).join('');let loaded=0,seen={};for(const [abbr,s]of outdoor){const key=s.lat+','+s.lon;if(seen[key]){grid.innerHTML+=renderWeatherCard(abbr,s,seen[key]);loaded++;status.textContent=loaded+'/'+outdoor.length+' loaded';continue;}try{const url='https://api.open-meteo.com/v1/forecast?latitude='+s.lat+'&longitude='+s.lon+'&current=temperature_2m,wind_speed_10m,precipitation,weather_code&wind_speed_unit=mph&temperature_unit=fahrenheit&forecast_days=1';const res=await fetch(url);const data=await res.json();const cur=data.current;const w={temp:Math.round(cur.temperature_2m),wind:Math.round(cur.wind_speed_10m),precip:cur.precipitation,code:cur.weather_code};seen[key]=w;grid.innerHTML+=renderWeatherCard(abbr,s,w);loaded++;status.textContent=loaded+'/'+outdoor.length+' loaded';}catch(e){grid.innerHTML+=renderWeatherCard(abbr,s,null);loaded++;}await new Promise(r=>setTimeout(r,150));}status.textContent='✅ All stadiums loaded — '+new Date().toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});}
-function renderWeatherCard(abbr,s,w){if(!w)return `<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px"><div style="font-weight:700">${abbr}</div><div style="color:var(--text3);font-size:11px">Failed to load</div></div>`;const cold=w.temp<32,windy=w.wind>15,alert=cold||windy,border=alert?'1px solid rgba(218,54,51,0.4)':'1px solid var(--border)',icon=w.code===0?'☀️':w.code<=3?'⛅':w.code<=49?'🌫️':w.code<=69?'🌧️':w.code<=79?'🌨️':w.code<=99?'⛈️':'🌤️',adj=alert?'<span style="color:var(--red2);font-size:10px;font-weight:600">⚠ −1 conf trigger</span>':'<span style="color:var(--green2);font-size:10px">✓ No adjustment</span>';return `<div style="background:var(--bg3);border:${border};border-radius:8px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-weight:700;font-size:13px">${abbr}</span><span style="font-size:20px">${icon}</span></div><div style="font-size:11px;color:var(--text2)">${s.name}</div><div style="font-size:10px;color:var(--text3);margin-bottom:8px">${s.city}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px"><div style="background:var(--bg2);border-radius:5px;padding:5px 8px;text-align:center"><div style="font-size:10px;color:var(--text3)">Temp</div><div style="font-size:15px;font-weight:600;color:${w.temp<32?'var(--blue2)':w.temp>90?'var(--red2)':'var(--text)'}">${w.temp}°F</div></div><div style="background:var(--bg2);border-radius:5px;padding:5px 8px;text-align:center"><div style="font-size:10px;color:var(--text3)">Wind</div><div style="font-size:15px;font-weight:600;color:${w.wind>15?'var(--red2)':'var(--text)'}">${w.wind} mph</div></div></div>${adj}</div>`;}
-</script>
+        // Initialize
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+        
+        // Check initial connection
+        if (!navigator.onLine) {
+            document.getElementById('errorBanner').classList.add('show');
+        }
+    </script>
 </body>
 </html>
